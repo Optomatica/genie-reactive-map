@@ -1,0 +1,315 @@
+┌ Info: 2023-08-07 15:41:35 Watching ["/home/opto/Projects/genie-reactive-map"]
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:19
+┌ Info: 2023-08-07 15:43:30 Watching ["/home/opto/Projects/genie-reactive-map"]
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:19
+┌ Info: 2023-08-07 15:46:01 Watching ["/home/opto/Projects/genie-reactive-map"]
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:19
+┌ Info: 2023-08-07 15:46:17 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:48:02 Watching ["/home/opto/Projects/genie-reactive-map"]
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:19
+┌ Info: 2023-08-07 15:48:07 
+│ Web Server starting at http://127.0.0.1:8000 
+└ @ Genie.Server /home/opto/.julia/packages/Genie/XpFvB/src/Server.jl:161
+┌ Info: 2023-08-07 15:48:07 Listening on: 127.0.0.1:8000, thread id: 1
+└ @ HTTP.Servers /home/opto/.julia/packages/HTTP/nn2yB/src/Servers.jl:366
+┌ Error: 2023-08-07 15:48:22 LoadError: syntax: missing separator in array expression
+│ Stacktrace:
+│   [1] top-level scope
+│     @ /tmp/jl_genie_build_S1TbZI/GenieViews/0dc5da90ea465674873897cd99a5ba8046814734.jl:11
+│   [2] include
+│     @ ./Base.jl:457 [inlined]
+│   [3] get_template(path::String; partial::Bool, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#303", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#303"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:360
+│   [4] get_template
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:343 [inlined]
+│   [5] render(viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#303", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#303"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:438
+│   [6] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:434 [inlined]
+│   [7] render(::Type{MIME{Symbol("text/html")}}, viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#303", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#303"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:486
+│   [8] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:482 [inlined]
+│   [9] #html#33
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:637 [inlined]
+│  [10] (::Stipple.Pages.var"#5#6"{FilePathsBase.PosixPath, Main.App.var"#5#6", String, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}})()
+│     @ Stipple.Pages ~/.julia/packages/Stipple/ZUojq/src/Pages.jl:60
+│  [11] run_route(r::Genie.Router.Route)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:535
+│  [12] route_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:171
+│  [13] handle_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:278
+│  [14] (::Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response})()
+│     @ Genie.Server /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/macros.jl:123
+│  [15] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [16] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [17] #153
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:425 [inlined]
+│  [18] run_work_thunk(thunk::Distributed.var"#153#154"{Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response}, Tuple{}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}, print_error::Bool)
+│     @ Distributed /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/process_messages.jl:70
+│  [19] #remotecall_fetch#158
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:450 [inlined]
+│  [20] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:449 [inlined]
+│  [21] #remotecall_fetch#162
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [22] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [23] setup_http_listener(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:305
+│  [24] setup_http_listener
+│     @ ~/.julia/packages/Genie/XpFvB/src/Server.jl:304 [inlined]
+│  [25] (::HTTP.Handlers.var"#1#2"{typeof(Genie.Server.setup_http_listener)})(stream::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ HTTP.Handlers ~/.julia/packages/HTTP/nn2yB/src/Handlers.jl:58
+│  [26] setup_http_streamer(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:294
+│  [27] (::Genie.Server.var"#7#14")(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:121
+│  [28] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [29] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [30] handle_connection(f::Function, c::HTTP.Connections.Connection{Sockets.TCPSocket}, listener::HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, readtimeout::Int64, access_log::Nothing)
+│     @ HTTP.Servers ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:447
+│  [31] macro expansion
+│     @ ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:385 [inlined]
+│  [32] (::HTTP.Servers.var"#16#17"{Genie.Server.var"#7#14", HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, Set{HTTP.Connections.Connection}, Int64, Nothing, Base.Semaphore, HTTP.Connections.Connection{Sockets.TCPSocket}})()
+│     @ HTTP.Servers ./task.jl:514
+│ in expression starting at /tmp/jl_genie_build_S1TbZI/GenieViews/0dc5da90ea465674873897cd99a5ba8046814734.jl:11
+│ 
+└ @ Genie.Server /home/opto/.julia/packages/Genie/XpFvB/src/Server.jl:317
+┌ Info: 2023-08-07 15:48:39 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:49:55 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Error: 2023-08-07 15:49:56 Template file "ui.jl" with extensions [".jl.html", ".jl"] does not exist
+│ Stacktrace:
+│   [1] error(s::String)
+│     @ Base ./error.jl:35
+│   [2] view_file_info(path::String, supported_extensions::Vector{String})
+│     @ Genie.Renderer ~/.julia/packages/Genie/XpFvB/src/Renderer.jl:317
+│   [3] get_template(path::String; partial::Bool, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#303", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#303"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:344
+│   [4] get_template
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:343 [inlined]
+│   [5] render(viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#303", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#303"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:438
+│   [6] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:434 [inlined]
+│   [7] render(::Type{MIME{Symbol("text/html")}}, viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#303", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#303"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:486
+│   [8] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:482 [inlined]
+│   [9] #html#33
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:637 [inlined]
+│  [10] (::Stipple.Pages.var"#5#6"{FilePathsBase.PosixPath, Main.App.var"#5#6", String, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}})()
+│     @ Stipple.Pages ~/.julia/packages/Stipple/ZUojq/src/Pages.jl:60
+│  [11] run_route(r::Genie.Router.Route)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:535
+│  [12] route_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:171
+│  [13] handle_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:278
+│  [14] (::Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response})()
+│     @ Genie.Server /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/macros.jl:123
+│  [15] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [16] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [17] #153
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:425 [inlined]
+│  [18] run_work_thunk(thunk::Distributed.var"#153#154"{Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response}, Tuple{}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}, print_error::Bool)
+│     @ Distributed /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/process_messages.jl:70
+│  [19] #remotecall_fetch#158
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:450 [inlined]
+│  [20] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:449 [inlined]
+│  [21] #remotecall_fetch#162
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [22] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [23] setup_http_listener(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:305
+│  [24] setup_http_listener
+│     @ ~/.julia/packages/Genie/XpFvB/src/Server.jl:304 [inlined]
+│  [25] (::HTTP.Handlers.var"#1#2"{typeof(Genie.Server.setup_http_listener)})(stream::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ HTTP.Handlers ~/.julia/packages/HTTP/nn2yB/src/Handlers.jl:58
+│  [26] setup_http_streamer(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:294
+│  [27] (::Genie.Server.var"#7#14")(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:121
+│  [28] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [29] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [30] handle_connection(f::Function, c::HTTP.Connections.Connection{Sockets.TCPSocket}, listener::HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, readtimeout::Int64, access_log::Nothing)
+│     @ HTTP.Servers ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:447
+│  [31] macro expansion
+│     @ ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:385 [inlined]
+│  [32] (::HTTP.Servers.var"#16#17"{Genie.Server.var"#7#14", HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, Set{HTTP.Connections.Connection}, Int64, Nothing, Base.Semaphore, HTTP.Connections.Connection{Sockets.TCPSocket}})()
+│     @ HTTP.Servers ./task.jl:514
+│ 
+└ @ Genie.Server /home/opto/.julia/packages/Genie/XpFvB/src/Server.jl:317
+┌ Info: 2023-08-07 15:50:03 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:50:10 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:51:50 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:52:10 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Error: 2023-08-07 15:52:29 Template file "ui.jl" with extensions [".jl.html", ".jl"] does not exist
+│ Stacktrace:
+│   [1] error(s::String)
+│     @ Base ./error.jl:35
+│   [2] view_file_info(path::String, supported_extensions::Vector{String})
+│     @ Genie.Renderer ~/.julia/packages/Genie/XpFvB/src/Renderer.jl:317
+│   [3] get_template(path::String; partial::Bool, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#304", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#304"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:344
+│   [4] get_template
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:343 [inlined]
+│   [5] render(viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#304", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#304"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:438
+│   [6] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:434 [inlined]
+│   [7] render(::Type{MIME{Symbol("text/html")}}, viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#304", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#304"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:486
+│   [8] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:482 [inlined]
+│   [9] #html#33
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:637 [inlined]
+│  [10] (::Stipple.Pages.var"#5#6"{FilePathsBase.PosixPath, Main.App.var"#5#6", String, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}})()
+│     @ Stipple.Pages ~/.julia/packages/Stipple/ZUojq/src/Pages.jl:60
+│  [11] run_route(r::Genie.Router.Route)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:535
+│  [12] route_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:171
+│  [13] handle_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:278
+│  [14] (::Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response})()
+│     @ Genie.Server /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/macros.jl:123
+│  [15] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [16] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [17] #153
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:425 [inlined]
+│  [18] run_work_thunk(thunk::Distributed.var"#153#154"{Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response}, Tuple{}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}, print_error::Bool)
+│     @ Distributed /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/process_messages.jl:70
+│  [19] #remotecall_fetch#158
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:450 [inlined]
+│  [20] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:449 [inlined]
+│  [21] #remotecall_fetch#162
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [22] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [23] setup_http_listener(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:305
+│  [24] setup_http_listener
+│     @ ~/.julia/packages/Genie/XpFvB/src/Server.jl:304 [inlined]
+│  [25] (::HTTP.Handlers.var"#1#2"{typeof(Genie.Server.setup_http_listener)})(stream::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ HTTP.Handlers ~/.julia/packages/HTTP/nn2yB/src/Handlers.jl:58
+│  [26] setup_http_streamer(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:294
+│  [27] (::Genie.Server.var"#7#14")(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:121
+│  [28] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [29] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [30] handle_connection(f::Function, c::HTTP.Connections.Connection{Sockets.TCPSocket}, listener::HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, readtimeout::Int64, access_log::Nothing)
+│     @ HTTP.Servers ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:447
+│  [31] macro expansion
+│     @ ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:385 [inlined]
+│  [32] (::HTTP.Servers.var"#16#17"{Genie.Server.var"#7#14", HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, Set{HTTP.Connections.Connection}, Int64, Nothing, Base.Semaphore, HTTP.Connections.Connection{Sockets.TCPSocket}})()
+│     @ HTTP.Servers ./task.jl:514
+│ 
+└ @ Genie.Server /home/opto/.julia/packages/Genie/XpFvB/src/Server.jl:317
+┌ Error: 2023-08-07 15:52:34 Template file "ui.jl" with extensions [".jl.html", ".jl"] does not exist
+│ Stacktrace:
+│   [1] error(s::String)
+│     @ Base ./error.jl:35
+│   [2] view_file_info(path::String, supported_extensions::Vector{String})
+│     @ Genie.Renderer ~/.julia/packages/Genie/XpFvB/src/Renderer.jl:317
+│   [3] get_template(path::String; partial::Bool, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#304", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#304"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:344
+│   [4] get_template
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:343 [inlined]
+│   [5] render(viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#304", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#304"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:438
+│   [6] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:434 [inlined]
+│   [7] render(::Type{MIME{Symbol("text/html")}}, viewfile::FilePathsBase.PosixPath; layout::String, context::Module, vars::Base.Pairs{Symbol, Main.App.var"##Main.App_ReactiveModel!#304", Tuple{Symbol}, NamedTuple{(:model,), Tuple{Main.App.var"##Main.App_ReactiveModel!#304"}}})
+│     @ Genie.Renderer.Html ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:486
+│   [8] render
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:482 [inlined]
+│   [9] #html#33
+│     @ ~/.julia/packages/Genie/XpFvB/src/renderers/Html.jl:637 [inlined]
+│  [10] (::Stipple.Pages.var"#5#6"{FilePathsBase.PosixPath, Main.App.var"#5#6", String, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}})()
+│     @ Stipple.Pages ~/.julia/packages/Stipple/ZUojq/src/Pages.jl:60
+│  [11] run_route(r::Genie.Router.Route)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:535
+│  [12] route_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Router ~/.julia/packages/Genie/XpFvB/src/Router.jl:171
+│  [13] handle_request(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:278
+│  [14] (::Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response})()
+│     @ Genie.Server /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/macros.jl:123
+│  [15] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [16] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [17] #153
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:425 [inlined]
+│  [18] run_work_thunk(thunk::Distributed.var"#153#154"{Genie.Server.var"#29#30"{HTTP.Messages.Request, HTTP.Messages.Response}, Tuple{}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}}, print_error::Bool)
+│     @ Distributed /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/process_messages.jl:70
+│  [19] #remotecall_fetch#158
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:450 [inlined]
+│  [20] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:449 [inlined]
+│  [21] #remotecall_fetch#162
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [22] remotecall_fetch
+│     @ /opt/julia-1.9.2/share/julia/stdlib/v1.9/Distributed/src/remotecall.jl:492 [inlined]
+│  [23] setup_http_listener(req::HTTP.Messages.Request, res::HTTP.Messages.Response)
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:305
+│  [24] setup_http_listener
+│     @ ~/.julia/packages/Genie/XpFvB/src/Server.jl:304 [inlined]
+│  [25] (::HTTP.Handlers.var"#1#2"{typeof(Genie.Server.setup_http_listener)})(stream::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ HTTP.Handlers ~/.julia/packages/HTTP/nn2yB/src/Handlers.jl:58
+│  [26] setup_http_streamer(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:294
+│  [27] (::Genie.Server.var"#7#14")(http::HTTP.Streams.Stream{HTTP.Messages.Request, HTTP.Connections.Connection{Sockets.TCPSocket}})
+│     @ Genie.Server ~/.julia/packages/Genie/XpFvB/src/Server.jl:121
+│  [28] #invokelatest#2
+│     @ ./essentials.jl:816 [inlined]
+│  [29] invokelatest
+│     @ ./essentials.jl:813 [inlined]
+│  [30] handle_connection(f::Function, c::HTTP.Connections.Connection{Sockets.TCPSocket}, listener::HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, readtimeout::Int64, access_log::Nothing)
+│     @ HTTP.Servers ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:447
+│  [31] macro expansion
+│     @ ~/.julia/packages/HTTP/nn2yB/src/Servers.jl:385 [inlined]
+│  [32] (::HTTP.Servers.var"#16#17"{Genie.Server.var"#7#14", HTTP.Servers.Listener{Nothing, Sockets.TCPServer}, Set{HTTP.Connections.Connection}, Int64, Nothing, Base.Semaphore, HTTP.Connections.Connection{Sockets.TCPSocket}})()
+│     @ HTTP.Servers ./task.jl:514
+│ 
+└ @ Genie.Server /home/opto/.julia/packages/Genie/XpFvB/src/Server.jl:317
+┌ Info: 2023-08-07 15:53:46 Watching ["/home/opto/Projects/genie-reactive-map"]
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:19
+┌ Info: 2023-08-07 15:53:53 
+│ Web Server starting at http://127.0.0.1:8000 
+└ @ Genie.Server /home/opto/.julia/packages/Genie/XpFvB/src/Server.jl:161
+┌ Info: 2023-08-07 15:53:53 Listening on: 127.0.0.1:8000, thread id: 1
+└ @ HTTP.Servers /home/opto/.julia/packages/HTTP/nn2yB/src/Servers.jl:366
+┌ Info: 2023-08-07 15:55:18 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:55:26 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:56:39 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
+┌ Info: 2023-08-07 15:56:55 Autoreloading
+└ @ GenieAutoReload /home/opto/.julia/packages/GenieAutoReload/IuBCb/src/GenieAutoReload.jl:22
