@@ -1,6 +1,4 @@
 <div>
-
-
   <plotly :data="trace" :layout="layout"></plotly>
-
+  <q-uploader label="Upload Dataset" accept=".csv" method="POST" url="http://127.0.0.1:8000/" v-on:uploaded="uploaded = true" v-on:removed="uploaded = false" />
 </div>

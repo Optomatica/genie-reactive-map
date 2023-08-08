@@ -1,46 +1,55 @@
 module App
 using PlotlyBase
 using GenieFramework
+using DataFrames
+using CSV
 @genietools
 
-@app begin
-    @out trace = [
-        scattergeo(
-            locationmode="ISO-3",
-            lon=[-0.12, -74],
-            lat=[51.50, 40.71],
-            text=["London", "New York"],
-            textposition="bottom right",
-            textfont=attr(family="Arial Black", size=18, color="blue"),
-            mode="markers+text",
-            marker=attr(size=10, color="blue"),
-            name="Cities"),
-        scattergeo(
-            locationmode="ISO-3",
-            lon=[-0.12, -74],
-            lat=[51.50, 40.71],
-            mode="lines",
-            line=attr(width=2, color="red"),
-            name="Route")
-                 ]
-    @out layout = PlotlyBase.Layout(
-            title = "World Map",
-            showlegend = false,
-            geo = attr(
-                showframe = false,
-                showcoastlines = false,
-                projection = attr(type = "natural earth")
-            ))
-    @in data_click = Dict{String, Any}()  # data from map click event
-    @in data_cursor = Dict{String, Any}()
+global_data = DataFrame()
 
-    @onchange data_click begin
-        @show data_click
-        @show data_cursor
-    end
+
+@app begin
+  @in uploaded = false
+  @out trace = []
+  @out layout = PlotlyBase.Layout(
+    title="World Map",
+    showlegend=false,
+    geo=attr(
+      showframe=false,
+      showcoastlines=false,
+      projection=attr(type="natural earth")
+    ))
+
+
+
+  @onbutton uploaded begin
+    data = global_data |> names
+    trace = [
+      scattergeo(
+        # locationmode="ISO-3",
+        lon=global_data[!, "Longitude"],
+        lat=global_data[!, "Latitude"],
+        # text=["London", "New York"],
+        textposition="bottom right",
+        textfont=attr(family="Arial Black", size=18, color="blue"),
+        mode="markers+text",
+        marker=attr(size=10, color="blue"),
+        name="Cities")
+    ]
+  end
+
 end
 
-@mounted watchplots()
+
+
 
 @page("/", "app.jl.html")
+
+route("/", method=POST) do
+  files = Genie.Requests.filespayload()
+  f = first(files)
+  global global_data = CSV.read(f[2].data, DataFrame)
+  return "Perfecto!"
+end
+
 end
