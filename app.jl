@@ -7,10 +7,23 @@ using CSV
 
 global_data = DataFrame()
 
-
 @app begin
   @in left_drawer_open = true
-  @out trace = []
+  @out trace = [
+    scattergeo(
+      lon=[],
+      lat=[],
+      locations="iso_alpha",
+      size="pop",
+      mode="markers",
+      marker=attr(
+        sizemode="area",
+        sizemin=4,
+        color="rgb(51, 153, 255)",
+        line=attr(color="rgb(255, 255, 255)", width=0.5)
+      ),
+    )
+  ]
   @out layout = PlotlyBase.Layout(
     title="World Map",
     showlegend=false,
@@ -21,11 +34,7 @@ global_data = DataFrame()
       projection=attr(type="natural earth")
     ))
 
-
-
   @event uploaded begin
-    println("Uploaded")
-    data = global_data |> names
     trace = [
       scattergeo(
         lon=global_data[!, "Longitude"],
@@ -39,8 +48,7 @@ global_data = DataFrame()
           color="rgb(51, 153, 255)",
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
-
-        )
+      )
     ]
   end
 
