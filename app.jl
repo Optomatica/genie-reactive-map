@@ -25,6 +25,7 @@ end
 
 @app begin
   @in left_drawer_open = true
+  @in current_year = 2023
   @in selected_color = "rgb(51, 153, 255)"
   @out trace = [
     scattermapbox(
