@@ -9,7 +9,9 @@ StippleUI.layout(
     ),
     ),
     drawer(
-      uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:200px"),
+      [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:200px"),
+      quasar(:color , var"v-model"=:selected_color ,label="Color"  ),
+      ],
       var"v-model"=:left_drawer_open, side="left", width=200, bordered=true, overlay=true
     ),
     page_container(

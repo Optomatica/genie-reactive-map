@@ -7,8 +7,25 @@ using CSV
 
 global_data = DataFrame()
 
+function plot(color) 
+
+  return scattergeo(
+    lon=global_data[!, "Longitude"],
+    lat=global_data[!, "Latitude"],
+    locations="iso_alpha",
+    size="pop",
+    mode="markers",
+    marker=attr(
+      size= (global_data[!,"Magnitude"] .^ 3) ./ 20,
+      color=color,
+      line=attr(color="rgb(255, 255, 255)", width=0.5)
+    ),
+  )
+end
+
 @app begin
   @in left_drawer_open = true
+  @in selected_color = "rgb(51, 153, 255)"
   @out trace = [
     scattergeo(
       lon=[],
@@ -43,11 +60,17 @@ global_data = DataFrame()
         size="pop",
         mode="markers",
         marker=attr(
-          size= (global_data[!,"Magnitude"] .^ 3) ./ 15,
+          size= (global_data[!,"Magnitude"] .^ 3) ./ 20,
           color="rgb(51, 153, 255)",
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
       )
+    ]
+  end
+
+  @onchange selected_color begin
+    trace = [
+      plot(selected_color)
     ]
   end
 
