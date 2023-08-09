@@ -7,9 +7,9 @@ using CSV
 
 global_data = DataFrame()
 
-function plot(color) 
+function myplot(color) 
 
-  return scattergeo(
+  return scattermapbox(
     lon=global_data[!, "Longitude"],
     lat=global_data[!, "Latitude"],
     locations="iso_alpha",
@@ -17,7 +17,7 @@ function plot(color)
     mode="markers",
     marker=attr(
       size= (global_data[!,"Magnitude"] .^ 3) ./ 20,
-      color=color,
+      color= color,
       line=attr(color="rgb(255, 255, 255)", width=0.5)
     ),
   )
@@ -73,7 +73,7 @@ end
 
   @onchange selected_color begin
     trace = [
-      plot(selected_color)
+      myplot(selected_color)
     ]
   end
 
