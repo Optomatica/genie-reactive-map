@@ -43,8 +43,7 @@ global_data = DataFrame()
         size="pop",
         mode="markers",
         marker=attr(
-          sizemode="area",
-          sizemin=4,
+          size= (global_data[!,"Magnitude"] .^ 3) ./ 15,
           color="rgb(51, 153, 255)",
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
