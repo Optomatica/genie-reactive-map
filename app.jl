@@ -10,7 +10,7 @@ global_data = DataFrame()
 @app begin
   @in left_drawer_open = true
   @out trace = [
-    scattergeo(
+    scattermapbox(
       lon=[],
       lat=[],
       locations="iso_alpha",
@@ -28,6 +28,9 @@ global_data = DataFrame()
     title="World Map",
     showlegend=false,
     width="1800",
+    mapbox=attr(
+      style="open-street-map",
+    ),
     geo=attr(
       showframe=false,
       showcoastlines=false,
@@ -36,14 +39,14 @@ global_data = DataFrame()
 
   @event uploaded begin
     trace = [
-      scattergeo(
+      scattermapbox(
         lon=global_data[!, "Longitude"],
         lat=global_data[!, "Latitude"],
         locations="iso_alpha",
         size="pop",
         mode="markers",
         marker=attr(
-          size= (global_data[!,"Magnitude"] .^ 3) ./ 15,
+          size=(global_data[!, "Magnitude"] .^ 3) ./ 20,
           color="rgb(51, 153, 255)",
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
