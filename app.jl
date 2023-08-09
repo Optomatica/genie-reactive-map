@@ -9,13 +9,12 @@ global_data = DataFrame()
 
 
 @app begin
-  @in uploaded = false
+  @in left_drawer_open = true
   @out trace = []
   @out layout = PlotlyBase.Layout(
     title="World Map",
     showlegend=false,
     width="1800",
-    height="1800",
     geo=attr(
       showframe=false,
       showcoastlines=false,
@@ -24,19 +23,24 @@ global_data = DataFrame()
 
 
 
-  @onbutton uploaded begin
+  @event uploaded begin
+    println("Uploaded")
     data = global_data |> names
     trace = [
       scattergeo(
-        # locationmode="ISO-3",
         lon=global_data[!, "Longitude"],
         lat=global_data[!, "Latitude"],
-        # text=["London", "New York"],
-        textposition="bottom right",
-        textfont=attr(family="Arial Black", size=18, color="blue"),
-        mode="markers+text",
-        marker=attr(size=10, color="blue"),
-        name="Cities")
+        locations="iso_alpha",
+        size="pop",
+        mode="markers",
+        marker=attr(
+          sizemode="area",
+          sizemin=4,
+          color="rgb(51, 153, 255)",
+          line=attr(color="rgb(255, 255, 255)", width=0.5)
+        ),
+
+        )
     ]
   end
 
@@ -45,7 +49,7 @@ end
 
 
 
-@page("/", "app.jl.html")
+@page("/", "ui.jl")
 
 route("/", method=POST) do
   files = Genie.Requests.filespayload()
