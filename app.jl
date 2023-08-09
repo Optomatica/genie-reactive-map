@@ -27,7 +27,7 @@ end
   @in left_drawer_open = true
   @in selected_color = "rgb(51, 153, 255)"
   @out trace = [
-    scattergeo(
+    scattermapbox(
       lon=[],
       lat=[],
       locations="iso_alpha",
@@ -45,6 +45,9 @@ end
     title="World Map",
     showlegend=false,
     width="1800",
+    mapbox=attr(
+      style="open-street-map",
+    ),
     geo=attr(
       showframe=false,
       showcoastlines=false,
@@ -53,7 +56,7 @@ end
 
   @event uploaded begin
     trace = [
-      scattergeo(
+      scattermapbox(
         lon=global_data[!, "Longitude"],
         lat=global_data[!, "Latitude"],
         locations="iso_alpha",
