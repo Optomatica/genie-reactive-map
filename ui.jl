@@ -1,5 +1,5 @@
 
-StippleUI.layout(
+ui = () -> StippleUI.layout(
   [
     quasar(:header, toolbar(
       [

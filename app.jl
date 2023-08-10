@@ -3,45 +3,31 @@ using PlotlyBase
 using GenieFramework
 using DataFrames
 using CSV
+include("./ui.jl")
 @genietools
 
-global_data = DataFrame()
+default_scatter_args = Dict(
+  :locations => "iso_alpha",
+  :size => "pop",
+  :mode => "markers",
+  :marker => attr(
+    color="rgb(51, 153, 255)",
+    line=attr(color="rgb(255, 255, 255)", width=0.5)
+  ),
+)
 
-function myplot(color) 
 
-  return scattermapbox(
-    lon=global_data[!, "Longitude"],
-    lat=global_data[!, "Latitude"],
-    locations="iso_alpha",
-    size="pop",
-    mode="markers",
-    marker=attr(
-      size= (global_data[!,"Magnitude"] .^ 3) ./ 20,
-      color= color,
-      line=attr(color="rgb(255, 255, 255)", width=0.5)
-    ),
-  )
+function myplot(args::Dict=Dict())
+  scattermapbox(; Dict(default_scatter_args..., args...)...)
 end
 
 @app begin
   @in left_drawer_open = true
   @in current_year = 2023
   @in selected_color = "rgb(51, 153, 255)"
-  @out trace = [
-    scattermapbox(
-      lon=[],
-      lat=[],
-      locations="iso_alpha",
-      size="pop",
-      mode="markers",
-      marker=attr(
-        sizemode="area",
-        sizemin=4,
-        color="rgb(51, 153, 255)",
-        line=attr(color="rgb(255, 255, 255)", width=0.5)
-      ),
-    )
-  ]
+
+  @out data = DataFrame(Longitude=[], Latitude=[], Magnitude=[])
+  @out trace = [myplot()]
   @out layout = PlotlyBase.Layout(
     title="World Map",
     showlegend=false,
@@ -54,41 +40,39 @@ end
       showcoastlines=false,
       projection=attr(type="natural earth")
     ))
-
-  @event uploaded begin
-    trace = [
-      scattermapbox(
-        lon=global_data[!, "Longitude"],
-        lat=global_data[!, "Latitude"],
-        locations="iso_alpha",
-        size="pop",
-        mode="markers",
-        marker=attr(
-          size= (global_data[!,"Magnitude"] .^ 3) ./ 20,
-          color="rgb(51, 153, 255)",
-          line=attr(color="rgb(255, 255, 255)", width=0.5)
-        ),
+  @onchange data begin
+    trace = [myplot(
+      Dict(
+        :lon => data[!, "Longitude"],
+        :lat => data[!, "Latitude"],
       )
-    ]
+    )]
   end
 
-  @onchange selected_color begin
-    trace = [
-      myplot(selected_color)
-    ]
-  end
+  # @onchange selected_color, data begin
+  #   trace = [
+  #     myplot(Dict(
+  #       :marker => attr(
+  #         size=(data[!, "Magnitude"] .^ 3) ./ 20,
+  #         color=selected_color,
+  #         line=attr(color="rgb(255, 255, 255)", width=0.5)
+  #       )
+  #     ))
+  #   ]
+  # end
 
 end
 
 
-
-
-@page("/", "ui.jl")
+route("/") do
+  global model = @init
+  return page(model, ui())
+end
 
 route("/", method=POST) do
   files = Genie.Requests.filespayload()
   f = first(files)
-  global global_data = CSV.read(f[2].data, DataFrame)
+  model.data[] = CSV.read(f[2].data, DataFrame)
   return "Perfecto!"
 end
 
