@@ -21,6 +21,7 @@ function get_date_ranges(dates::Vector)
   parsed_dates = dmy.(dates)
   parsed_dates[isnothing.(parsed_dates)] = dates[isnothing.(parsed_dates)] .|> ymd
   years = parsed_dates .|> Dates.year
+  model.data[][!, "years"] = years
   model.min_year[] = minimum(years)
   model.max_year[] = maximum(years)
 end
@@ -53,7 +54,8 @@ end
     ))
 
   @onchange data begin
-    trace = [myplot()]
+    trace = [myplot(Dict(:lon => data[!, "Longitude"],
+      :lat => data[!, "Latitude"]))]
   end
 
   @onchange selected_color begin
@@ -69,6 +71,25 @@ end
       ))
     ]
   end
+
+
+
+  @onchange filter_range begin
+    filtered_data = filter(i -> i.years >= first(filter_range.range) && i.years <= last(filter_range.range), data)
+    @show size(filtered_data)
+    trace = [
+      myplot(Dict(
+        :marker => attr(
+          size=(data[!, "Magnitude"] .^ 3) ./ 20,
+          color=selected_color,
+          line=attr(color="rgb(255, 255, 255)", width=0.5)
+        ),
+        :lon => filtered_data[!, "Longitude"],
+        :lat => filtered_data[!, "Latitude"]
+      ))
+    ]
+  end
+
 
 end
 
