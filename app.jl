@@ -3,6 +3,7 @@ using PlotlyBase
 using GenieFramework
 using DataFrames
 using CSV
+using TidierDates
 include("./ui.jl")
 @genietools
 
@@ -16,9 +17,16 @@ default_scatter_args = Dict(
   ),
 )
 
+function get_date_ranges(dates::Vector)
+  dates = ymd(dates)
+  dates[isnothing(dates)] = dmy(dates[isnothing(dates)])
+  years = dates |> Dates.year
+  model.min_year[] = min(years)
+  model.max_year[] = max(years)
+end
+
 
 function myplot(args::Dict=Dict())
-
   scattermapbox(; Dict(default_scatter_args..., args..., :lon => model.data[][!, "Longitude"],
     :lat => model.data[][!, "Latitude"],)...)
 end
@@ -28,7 +36,9 @@ end
   @in current_year = 2023
   @in selected_color = "rgb(51, 153, 255)"
 
-  @out data = DataFrame(Longitude=[], Latitude=[], Magnitude=[])
+  @out min_year = 0
+  @out max_year =
+    @out data = DataFrame(Longitude=[], Latitude=[], Magnitude=[])
   @out trace = [myplot()]
   @out layout = PlotlyBase.Layout(
     title="World Map",
@@ -42,13 +52,9 @@ end
       showcoastlines=false,
       projection=attr(type="natural earth")
     ))
+
   @onchange data begin
-    trace = [myplot(
-      Dict(
-        :lon => data[!, "Longitude"],
-        :lat => data[!, "Latitude"],
-      )
-    )]
+    trace = [myplot()]
   end
 
   @onchange selected_color begin
@@ -75,6 +81,7 @@ route("/", method=POST) do
   files = Genie.Requests.filespayload()
   f = first(files)
   model.data[] = CSV.read(f[2].data, DataFrame)
+  get_date_ranges(model.data[][!, :Date])
   return "Perfecto!"
 end
 
