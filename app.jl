@@ -18,27 +18,26 @@ default_scatter_args = Dict(
 )
 
 function get_date_ranges(dates::Vector)
-  dates = ymd(dates)
-  dates[isnothing(dates)] = dmy(dates[isnothing(dates)])
-  years = dates |> Dates.year
-  model.min_year[] = min(years)
-  model.max_year[] = max(years)
+  parsed_dates = dmy.(dates)
+  parsed_dates[isnothing.(parsed_dates)] = dates[isnothing.(parsed_dates)] .|> ymd
+  years = parsed_dates .|> Dates.year
+  model.min_year[] = minimum(years)
+  model.max_year[] = maximum(years)
 end
 
 
 function myplot(args::Dict=Dict())
-  scattermapbox(; Dict(default_scatter_args..., args..., :lon => model.data[][!, "Longitude"],
-    :lat => model.data[][!, "Latitude"],)...)
+  scattermapbox(; Dict(default_scatter_args..., args...)...)
 end
 
 @app begin
   @in left_drawer_open = true
-  @in current_year = 2023
+  @in filter_range::RangeData{Int} = RangeData(1:10)
   @in selected_color = "rgb(51, 153, 255)"
 
   @out min_year = 0
-  @out max_year =
-    @out data = DataFrame(Longitude=[], Latitude=[], Magnitude=[])
+  @out max_year = Dates.year(now())
+  @out data = DataFrame(Longitude=[], Latitude=[], Magnitude=[])
   @out trace = [myplot()]
   @out layout = PlotlyBase.Layout(
     title="World Map",
@@ -64,7 +63,9 @@ end
           size=(data[!, "Magnitude"] .^ 3) ./ 20,
           color=selected_color,
           line=attr(color="rgb(255, 255, 255)", width=0.5)
-        )
+        ),
+        :lon => data[!, "Longitude"],
+        :lat => data[!, "Latitude"]
       ))
     ]
   end

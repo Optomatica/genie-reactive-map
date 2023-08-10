@@ -11,8 +11,8 @@ ui = () -> StippleUI.layout(
     drawer(
       [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:200px"),
         quasar(:color, var"v-model"=:selected_color, label="Color"),
-        item([itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right"); avatar=true), itemsection(slider(1:5:100, :current_year))]),
-        h1("{{current_year}}")
+        item([itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right"); avatar=true), itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="purple",
+          labelalways=true,))]),
       ],
       var"v-model"=:left_drawer_open, side="left", width=200, bordered=true, overlay=true
     ),
