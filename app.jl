@@ -19,8 +19,7 @@ default_scatter_args = Dict(
 
 function myplot(args::Dict=Dict())
 
-  scattermapbox(; Dict(default_scatter_args..., args..., :lon => model.data[][!, "Longitude"],
-    :lat => model.data[][!, "Latitude"],)...)
+  scattermapbox(; Dict(default_scatter_args..., args...)...)
 end
 
 @app begin
@@ -58,7 +57,9 @@ end
           size=(data[!, "Magnitude"] .^ 3) ./ 20,
           color=selected_color,
           line=attr(color="rgb(255, 255, 255)", width=0.5)
-        )
+        ),
+        :lon => data[!, "Longitude"],
+        :lat => data[!, "Latitude"]
       ))
     ]
   end
