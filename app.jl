@@ -49,17 +49,19 @@ end
     )]
   end
 
-  # @onchange selected_color, data begin
-  #   trace = [
-  #     myplot(Dict(
-  #       :marker => attr(
-  #         size=(data[!, "Magnitude"] .^ 3) ./ 20,
-  #         color=selected_color,
-  #         line=attr(color="rgb(255, 255, 255)", width=0.5)
-  #       )
-  #     ))
-  #   ]
-  # end
+  @onchange selected_color begin
+    trace = [
+      myplot(Dict(
+        :lon => data[!, "Longitude"],
+        :lat => data[!, "Latitude"],
+        :marker => attr(
+          size=(data[!, "Magnitude"] .^ 3) ./ 20,
+          color=selected_color,
+          line=attr(color="rgb(255, 255, 255)", width=0.5)
+        )
+      ))
+    ]
+  end
 
 end
 
