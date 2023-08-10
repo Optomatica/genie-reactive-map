@@ -18,7 +18,9 @@ default_scatter_args = Dict(
 
 
 function myplot(args::Dict=Dict())
-  scattermapbox(; Dict(default_scatter_args..., args...)...)
+
+  scattermapbox(; Dict(default_scatter_args..., args..., :lon => model.data[][!, "Longitude"],
+    :lat => model.data[][!, "Latitude"],)...)
 end
 
 @app begin
@@ -52,8 +54,6 @@ end
   @onchange selected_color begin
     trace = [
       myplot(Dict(
-        :lon => data[!, "Longitude"],
-        :lat => data[!, "Latitude"],
         :marker => attr(
           size=(data[!, "Magnitude"] .^ 3) ./ 20,
           color=selected_color,
