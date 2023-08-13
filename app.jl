@@ -15,9 +15,10 @@ function get_date_ranges(dates::Vector)
   parsed_dates[isnothing.(parsed_dates)] = dates[isnothing.(parsed_dates)] .|> ymd
   years = parsed_dates .|> Dates.year
   model.data[][!, "Date"] = years
-  model.min_year[] = minimum(years)
-  model.max_year[] = maximum(years)
-  model.filter_range[] = RangeData(model.min_year[]:model.max_year[])
+  min_year, max_year = minimum(years), maximum(years)
+  model.min_year[] = min_year
+  model.max_year[] = max_year
+  model.filter_range[].range = min_year:max_year
 end
 
 function map_values(x::Vector)
@@ -46,8 +47,7 @@ end
 
 @app begin
   @in left_drawer_open = true
-  @in filter_range::RangeData{Int} = RangeData(1:10)
-  @in selected_color = "rgb(51, 153, 255)"
+  @in filter_range::Union{RangeData{Int},Nothing} = nothing
   @in selected_feature::Union{Nothing,String} = nothing
 
 
@@ -84,13 +84,12 @@ end
     )]
   end
 
-  @onchange selected_color, selected_feature begin
+  @onchange selected_feature begin
     trace = [
       myplot(Dict(
         :marker => attr(
           size=map_values(data[!, selected_feature]),
-          color=selected_color,
-          line=attr(color="rgb(255, 255, 255)", width=0.5)
+          color=data[!, selected_feature],
         ),
         :lon => data[!, "Longitude"],
         :lat => data[!, "Latitude"]
@@ -101,14 +100,14 @@ end
 
 
   @onchange filter_range, selected_feature begin
+    @show selected_feature
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
-    @show size(filtered_data)
     trace = [
       myplot(Dict(
         :marker => attr(
           size=map_values(data[!, selected_feature]),
-          color=selected_color,
-          line=attr(color="rgb(255, 255, 255)", width=0.5)
+          color=data[!, selected_feature],
+          colorscale="Greens"
         ),
         :lon => filtered_data[!, "Longitude"],
         :lat => filtered_data[!, "Latitude"]
