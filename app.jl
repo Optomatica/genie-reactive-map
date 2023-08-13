@@ -8,7 +8,7 @@ include("./ui.jl")
 @genietools
 
 const min_radius = 4
-const max_radius = 50
+const max_radius = 30
 
 default_scatter_args = Dict(
   :locations => "iso_alpha",
@@ -97,7 +97,7 @@ end
     trace = [
       myplot(Dict(
         :marker => attr(
-          size=(data[!, selected_feature] .^ 3) ./ 20,
+          size=map_values(data[!, selected_feature]),
           color=selected_color,
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
@@ -115,7 +115,7 @@ end
     trace = [
       myplot(Dict(
         :marker => attr(
-          size=(data[!, selected_feature] .^ 3) ./ 20,
+          size=map_values(data[!, selected_feature]),
           color=selected_color,
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
