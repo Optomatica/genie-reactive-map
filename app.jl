@@ -10,16 +10,6 @@ include("./ui.jl")
 const min_radius = 4
 const max_radius = 30
 
-default_scatter_args = Dict(
-  :locations => "iso_alpha",
-  :size => "pop",
-  :mode => "markers",
-  :marker => attr(
-    color="rgb(51, 153, 255)",
-    line=attr(color="rgb(255, 255, 255)", width=0.5)
-  ),
-)
-
 function get_date_ranges(dates::Vector)
   parsed_dates = dmy.(dates)
   parsed_dates[isnothing.(parsed_dates)] = dates[isnothing.(parsed_dates)] .|> ymd
@@ -27,6 +17,7 @@ function get_date_ranges(dates::Vector)
   model.data[][!, "Date"] = years
   model.min_year[] = minimum(years)
   model.max_year[] = maximum(years)
+  model.filter_range[] = RangeData(model.min_year[]:model.max_year[])
 end
 
 function map_values(x::Vector)
@@ -37,7 +28,7 @@ end
 
 
 function myplot(args::Dict=Dict())
-  scattermapbox(; Dict(default_scatter_args..., args...)...)
+  scattermapbox(; args...)
 end
 
 function mapFields()
@@ -57,13 +48,13 @@ end
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(1:10)
   @in selected_color = "rgb(51, 153, 255)"
-  @in selected_feature = "x"
+  @in selected_feature::Union{Nothing,String} = nothing
 
 
   @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = Dates.year(now())
-  @out features = ["x"]
+  @out features::Array{String} = []
   @out data = DataFrame()
   @out trace = [myplot()]
   @out layout = PlotlyBase.Layout(
@@ -82,6 +73,7 @@ end
     mapFields()
     get_date_ranges(model.data[][!, :Date])
     features = names(model.data[])
+    selected_feature = features[1]
 
 
     trace = [myplot(
@@ -93,7 +85,6 @@ end
   end
 
   @onchange selected_color, selected_feature begin
-
     trace = [
       myplot(Dict(
         :marker => attr(
