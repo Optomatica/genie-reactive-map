@@ -7,6 +7,9 @@ using TidierDates
 include("./ui.jl")
 @genietools
 
+const min_radius = 4
+const max_radius = 50
+
 default_scatter_args = Dict(
   :locations => "iso_alpha",
   :size => "pop",
@@ -24,6 +27,12 @@ function get_date_ranges(dates::Vector)
   model.data[][!, "Date"] = years
   model.min_year[] = minimum(years)
   model.max_year[] = maximum(years)
+end
+
+function map_values(x::Vector)
+  min = minimum(x)
+  max = maximum(x)
+  return (x .- min) ./ (max - min) .* (max_radius - min_radius) .+ min_radius
 end
 
 
