@@ -48,19 +48,22 @@ function mapFields()
   latInd = findfirst(x -> occursin("lat", lowercase(x)), input_cols)
   lonInd = findfirst(x -> occursin("lon", lowercase(x)), input_cols)
   dateInd = findfirst(x -> occursin("date", lowercase(x)), input_cols)
-
-  model.data[] = DataFrame(Longitude=df[:, lonInd], Latitude=df[:, latInd], Date=df[:, dateInd], Magnitude=fill(3, size(df, 1)))
-
+  new_data = copy(df)
+  new_data[!, [:Latitude, :Longitude, :Date]] = df[:, [latInd, lonInd, dateInd]]
+  model.data[] = new_data
 end
 
 @app begin
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(1:10)
   @in selected_color = "rgb(51, 153, 255)"
+  @in selected_feature = "x"
+
 
   @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = Dates.year(now())
+  @out features = ["x"]
   @out data = DataFrame()
   @out trace = [myplot()]
   @out layout = PlotlyBase.Layout(
@@ -78,6 +81,7 @@ end
   @onchange input_data begin
     mapFields()
     get_date_ranges(model.data[][!, :Date])
+    features = names(model.data[])
 
 
     trace = [myplot(
@@ -88,12 +92,12 @@ end
     )]
   end
 
-  @onchange selected_color begin
+  @onchange selected_color, selected_feature begin
 
     trace = [
       myplot(Dict(
         :marker => attr(
-          # size=(data[!, "Magnitude"] .^ 3) ./ 20,
+          size=(data[!, selected_feature] .^ 3) ./ 20,
           color=selected_color,
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
@@ -105,13 +109,13 @@ end
 
 
 
-  @onchange filter_range begin
+  @onchange filter_range, selected_feature begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
     @show size(filtered_data)
     trace = [
       myplot(Dict(
         :marker => attr(
-          # size=(data[!, "Magnitude"] .^ 3) ./ 20,
+          size=(data[!, selected_feature] .^ 3) ./ 20,
           color=selected_color,
           line=attr(color="rgb(255, 255, 255)", width=0.5)
         ),
