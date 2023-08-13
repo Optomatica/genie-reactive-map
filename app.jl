@@ -9,6 +9,7 @@ include("./ui.jl")
 
 const min_radius = 4
 const max_radius = 30
+const current_year = Dates.year(now())
 
 function get_date_ranges(dates::Vector)
   parsed_dates = dmy.(dates)
@@ -47,13 +48,13 @@ end
 
 @app begin
   @in left_drawer_open = true
-  @in filter_range::Union{RangeData{Int},Nothing} = nothing
+  @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_feature::Union{Nothing,String} = nothing
 
 
   @out input_data = DataFrame()
   @out min_year = 0
-  @out max_year = Dates.year(now())
+  @out max_year = current_year
   @out features::Array{String} = []
   @out data = DataFrame()
   @out trace = [myplot()]
