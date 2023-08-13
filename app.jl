@@ -97,10 +97,7 @@ end
     ]
   end
 
-
-
-  @onchange filter_range, selected_feature begin
-    @show selected_feature
+  @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
     trace = [
       myplot(Dict(
@@ -114,7 +111,6 @@ end
       ))
     ]
   end
-
 
 end
 
