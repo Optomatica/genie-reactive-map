@@ -1,11 +1,24 @@
 module App
 using PlotlyBase
-using GenieFramework
+using GenieFramework, GenieFramework.StipplePlotly
 using DataFrames
 using CSV
 using TidierDates
 include("./ui.jl")
 @genietools
+
+
+Base.@kwdef struct ScatterModel
+  lat::R{Vector{Float64}} = []
+  lon::R{Vector{Float64}} = []
+  marker::R{PlotlyBase.PlotlyAttribute} = attr(
+    size=[],
+    color=[],
+    colorscale="Greens"
+  )
+end
+
+
 
 const min_radius = 4
 const max_radius = 30
@@ -28,11 +41,6 @@ function map_values(x::Vector)
   return (x .- min) ./ (max - min) .* (max_radius - min_radius) .+ min_radius
 end
 
-
-function myplot(args::Dict=Dict())
-  scattermapbox(; args...)
-end
-
 function mapFields()
 
   input_cols = names(model.input_data[])
@@ -46,12 +54,14 @@ function mapFields()
   model.data[] = new_data
 end
 
-@app begin
+@app Model begin
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_feature::Union{Nothing,String} = nothing
   @in color_scale = "Greens"
   @in animate = false
+
+  @mixin ScatterModel
 
   @out color_scale_options = ["Blackbody", "Bluered", "Blues", "Cividis", "Earth", "Electric", "Greens", "Greys", "Hot", "Jet", "Picnic", "Portland", "Rainbow", "RdBu", "Reds", "Viridis", "YlGnBu", "YlOrRd"]
   @out input_data = DataFrame()
@@ -59,7 +69,7 @@ end
   @out max_year = current_year
   @out features::Array{String} = []
   @out data = DataFrame()
-  @out trace = [myplot()]
+  @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(
     title="World Map",
     showlegend=false,
@@ -72,47 +82,46 @@ end
       showcoastlines=false,
       projection=attr(type="natural earth")
     ))
+
   @onchange input_data begin
     mapFields()
-    get_date_ranges(model.data[][!, :Date])
-    features = names(model.data[])
+    get_date_ranges(data[!, :Date])
+    features = names(data)
     selected_feature = features[1]
-
-    trace = [myplot(
-      Dict(
-        :lon => data[!, "Longitude"],
-        :lat => data[!, "Latitude"],
-      )
-    )]
+    lon = data[!, "Longitude"]
+    lat = data[!, "Latitude"]
   end
 
-  @onchange selected_feature, color_scale begin
-    trace = [
-      myplot(Dict(
-        :marker => attr(
-          size=map_values(data[!, selected_feature]),
-          color=data[!, selected_feature],
-          colorscale=color_scale
-        ),
-        :lon => data[!, "Longitude"],
-        :lat => data[!, "Latitude"]
-      ))
-    ]
+  @onchange selected_feature begin
+    marker = attr(
+      size=map_values(data[!, selected_feature]),
+      color=data[!, selected_feature],
+      colorscale="Greens"
+    )
+  end
+
+  @onchange color_scale begin
+    marker = attr(
+      size=marker.size,
+      color=marker.color,
+      colorscale=color_scale
+    )
   end
 
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
+    marker = attr(
+      size=map_values(filtered_data[!, selected_feature]),
+      color=filtered_data[!, selected_feature],
+      colorscale=marker.colorscale
+    )
+    lon = filtered_data[!, "Longitude"],
+    lat = filtered_data[!, "Latitude"]
+  end
+
+  @onchange lon, lat, marker begin
     trace = [
-      myplot(Dict(
-        :marker => attr(
-          size=map_values(data[!, selected_feature]),
-          color=data[!, selected_feature],
-          colorscale=color_scale
-        ),
-        :lon => filtered_data[!, "Longitude"],
-        :lat => filtered_data[!, "Latitude"]
-      ))
-    ]
+      scattermapbox(; lon=lon, lat=lat, marker=marker)]
   end
 
   @onchange animate begin
@@ -131,7 +140,7 @@ end
 
 
 route("/") do
-  global model = @init
+  global model = Model |> init |> handlers
   return page(model, ui())
 end
 
