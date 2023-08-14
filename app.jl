@@ -11,7 +11,7 @@ using .Utils: scale_array, map_fields
 @genietools
 
 
-@app begin
+@app Model begin
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_feature::Union{Nothing,String} = nothing
@@ -26,7 +26,7 @@ using .Utils: scale_array, map_fields
   @out max_year = current_year
   @out features::Array{String} = []
   @out data = DataFrame()
-  @out trace = [myplot()]
+  @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(
     title="World Map",
     showlegend=false,
@@ -87,17 +87,11 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange lon, lat, marker begin
-    trace = [
-      myplot(Dict(
-        :marker => attr(
-          size=map_values(data[!, selected_feature]),
-          color=data[!, selected_feature],
-          colorscale=color_scale
-        ),
-        :lon => filtered_data[!, "Longitude"],
-        :lat => filtered_data[!, "Latitude"]
-      ))
-    ]
+    trace = [scattermapbox(
+      lat=lat,
+      lon=lon,
+      marker=marker
+    )]
   end
 
   @onbutton animate begin
@@ -114,7 +108,7 @@ end
 
 
 route("/") do
-  global model = @init
+  global model = Model |> init |> handlers
   return page(model, ui())
 end
 
