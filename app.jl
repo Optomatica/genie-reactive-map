@@ -3,56 +3,14 @@ using PlotlyBase
 using GenieFramework, GenieFramework.StipplePlotly
 using DataFrames
 using CSV
-using TidierDates
 include("./ui.jl")
+include("./constants.jl")
+include("./utils.jl")
+using .Constants: current_year, ScatterModel, COLOR_SCALE_OPTIONS
+using .Utils: scale_array, map_fields
 @genietools
 
 
-Base.@kwdef struct ScatterModel
-  lat::R{Vector{Float64}} = []
-  lon::R{Vector{Float64}} = []
-  marker::R{PlotlyBase.PlotlyAttribute} = attr(
-    size=[],
-    color=[],
-    colorscale="Greens"
-  )
-end
-
-
-
-const min_radius = 4
-const max_radius = 30
-const current_year = Dates.year(now())
-
-function get_date_ranges(dates::Vector)
-  parsed_dates = dmy.(dates)
-  parsed_dates[isnothing.(parsed_dates)] = dates[isnothing.(parsed_dates)] .|> ymd
-  years = parsed_dates .|> Dates.year
-  model.data[][!, "Date"] = years
-  min_year, max_year = minimum(years), maximum(years)
-  model.min_year[] = min_year
-  model.max_year[] = max_year
-  model.filter_range[].range = min_year:max_year
-end
-
-function map_values(x::Vector)
-  min = minimum(x)
-  max = maximum(x)
-  return (x .- min) ./ (max - min) .* (max_radius - min_radius) .+ min_radius
-end
-
-function mapFields()
-
-  input_cols = names(model.input_data[])
-  df = model.input_data[]
-
-  latInd = findfirst(x -> occursin("lat", lowercase(x)), input_cols)
-  lonInd = findfirst(x -> occursin("lon", lowercase(x)), input_cols)
-  dateInd = findfirst(x -> occursin("date", lowercase(x)), input_cols)
-  new_data = copy(df)
-  new_data[!, [:Latitude, :Longitude, :Date]] = df[:, [latInd, lonInd, dateInd]]
-  model.data[] = new_data
-end
 
 @app Model begin
   @in left_drawer_open = true
@@ -63,7 +21,7 @@ end
 
   @mixin ScatterModel
 
-  @out color_scale_options = ["Blackbody", "Bluered", "Blues", "Cividis", "Earth", "Electric", "Greens", "Greys", "Hot", "Jet", "Picnic", "Portland", "Rainbow", "RdBu", "Reds", "Viridis", "YlGnBu", "YlOrRd"]
+  @out color_scale_options = COLOR_SCALE_OPTIONS
   @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = current_year
@@ -84,17 +42,28 @@ end
     ))
 
   @onchange input_data begin
-    mapFields()
-    get_date_ranges(data[!, :Date])
+    data = map_fields(input_data)
+  end
+
+  @onchange data begin
     features = names(data)
     selected_feature = features[1]
+
     lon = data[!, "Longitude"]
     lat = data[!, "Latitude"]
+
+    min_year = minimum(data[!, "Date"])
+    max_year = maximum(data[!, "Date"])
+
+  end
+
+  @onchange min_year, max_year begin
+    filter_range = RangeData(min_year:max_year)
   end
 
   @onchange selected_feature begin
     marker = attr(
-      size=map_values(data[!, selected_feature]),
+      size=scale_array(data[!, selected_feature]),
       color=data[!, selected_feature],
       colorscale="Greens"
     )
@@ -111,12 +80,12 @@ end
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
     marker = attr(
-      size=map_values(filtered_data[!, selected_feature]),
+      size=scale_array(filtered_data[!, selected_feature]),
       color=filtered_data[!, selected_feature],
       colorscale=marker.colorscale
     )
-    lon = filtered_data[!, "Longitude"],
-    lat = filtered_data[!, "Latitude"]
+    # lon = filtered_data[!, "Longitude"],
+    # lat = filtered_data[!, "Latitude"]
   end
 
   @onchange lon, lat, marker begin
