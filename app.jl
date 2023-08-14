@@ -58,9 +58,12 @@ end
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_feature::Union{Nothing,String} = nothing
+  @in color_scale = "Greens"
+  @in animate = false
 
   @mixin ScatterModel
 
+  @out color_scale_options = ["Blackbody", "Bluered", "Blues", "Cividis", "Earth", "Electric", "Greens", "Greys", "Hot", "Jet", "Picnic", "Portland", "Rainbow", "RdBu", "Reds", "Viridis", "YlGnBu", "YlOrRd"]
   @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = current_year
@@ -97,12 +100,20 @@ end
     )
   end
 
+  @onchange color_scale begin
+    marker = attr(
+      size=marker.size,
+      color=marker.color,
+      colorscale=color_scale
+    )
+  end
+
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
     marker = attr(
       size=map_values(filtered_data[!, selected_feature]),
       color=filtered_data[!, selected_feature],
-      colorscale="Greens"
+      colorscale=marker.colorscale
     )
     lon = filtered_data[!, "Longitude"],
     lat = filtered_data[!, "Latitude"]
@@ -110,8 +121,21 @@ end
 
   @onchange lon, lat, marker begin
     trace = [
-      scattermapbox(; lon=lon, lat=lat, marker=marker)
-    ]
+      scattermapbox(; lon=lon, lat=lat, marker=marker)]
+  end
+
+  @onchange animate begin
+    if animate
+      years_diff = model.max_year[] - model.min_year[]
+      for i in model.min_year[]:model.max_year[]
+        println(i, " ", model.min_year[], " ", model.max_year[])
+
+        filter_range.range = i:(i+years_diff)
+
+        println(filter_range.range)
+        sleep(0.1)
+      end
+    end
   end
 
 end
