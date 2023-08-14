@@ -117,10 +117,11 @@ end
 
   @onchange animate begin
     if animate
+      years_diff = model.max_year[] - model.min_year[]
       for i in model.min_year[]:model.max_year[]
         println(i, " ", model.min_year[], " ", model.max_year[])
 
-        filter_range.range[] = model.min_year[]:i
+        filter_range.range = i:(i+years_diff)
 
         println(filter_range.range)
         sleep(0.1)
