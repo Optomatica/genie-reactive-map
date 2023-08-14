@@ -95,14 +95,12 @@ using .Utils: scale_array, map_fields
 
   @onchange animate begin
     if animate
-      years_diff = model.max_year[] - model.min_year[]
-      for i in model.min_year[]:model.max_year[]
-        println(i, " ", model.min_year[], " ", model.max_year[])
-
-        filter_range.range = i:(i+years_diff)
-
-        println(filter_range.range)
-        sleep(0.1)
+      first_year = model.filter_range[].range[1]
+      last_year = model.filter_range[].range[end]
+      years_diff = last_year - first_year
+      for i in first_year:(model.max_year[]-years_diff)
+        model.filter_range[] = RangeData(i:i+years_diff)
+        sleep(0.5)
       end
     end
   end
