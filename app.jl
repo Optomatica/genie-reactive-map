@@ -50,8 +50,10 @@ end
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_feature::Union{Nothing,String} = nothing
+  @in color_scale = "Greens"
+  @in animate = false
 
-
+  @out color_scale_options = ["Blackbody", "Bluered", "Blues", "Cividis", "Earth", "Electric", "Greens", "Greys", "Hot", "Jet", "Picnic", "Portland", "Rainbow", "RdBu", "Reds", "Viridis", "YlGnBu", "YlOrRd"]
   @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = current_year
@@ -76,7 +78,6 @@ end
     features = names(model.data[])
     selected_feature = features[1]
 
-
     trace = [myplot(
       Dict(
         :lon => data[!, "Longitude"],
@@ -85,12 +86,13 @@ end
     )]
   end
 
-  @onchange selected_feature begin
+  @onchange selected_feature, color_scale begin
     trace = [
       myplot(Dict(
         :marker => attr(
           size=map_values(data[!, selected_feature]),
           color=data[!, selected_feature],
+          colorscale=color_scale
         ),
         :lon => data[!, "Longitude"],
         :lat => data[!, "Latitude"]
@@ -105,12 +107,25 @@ end
         :marker => attr(
           size=map_values(data[!, selected_feature]),
           color=data[!, selected_feature],
-          colorscale="Greens"
+          colorscale=color_scale
         ),
         :lon => filtered_data[!, "Longitude"],
         :lat => filtered_data[!, "Latitude"]
       ))
     ]
+  end
+
+  @onchange animate begin
+    if animate
+      for i in model.min_year[]:model.max_year[]
+        println(i, " ", model.min_year[], " ", model.max_year[])
+
+        filter_range.range[] = model.min_year[]:i
+
+        println(filter_range.range)
+        sleep(0.1)
+      end
+    end
   end
 
 end
