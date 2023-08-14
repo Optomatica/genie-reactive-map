@@ -33,7 +33,7 @@ using .Utils: scale_array, map_fields
     showlegend=false,
     width="1800",
     mapbox=attr(
-      style="satellite",),
+      style="open-street-map",),
     geo=attr(
       showframe=false,
       showcoastlines=false,
