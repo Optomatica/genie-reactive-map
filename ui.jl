@@ -10,11 +10,7 @@ ui = () -> StippleUI.layout(
     drawer(
       [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
         # item([itemsection(p("Marker color")), itemsection(input(type="color", var"v-model"=:selected_color, label="Color"))]),
-        item([
-          itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right", @click(:animate)); avatar=true, @showif("!animate")),
-          itemsection(btn(; dense=true, flat=true, round=true, icon="pause", @click("animate = false")); avatar=true, @showif(:animate)),
-          itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="purple", labelalways=true)),
-        ]),
+
         item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
         item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true)),
         item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
@@ -23,7 +19,13 @@ ui = () -> StippleUI.layout(
       var"v-model"=:left_drawer_open, side="left", bordered=true, overlay=true
     ),
     page_container(
-      [plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height"),]
+      [plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height"),
+      Genie.Renderer.Html.div(
+        [
+          itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right", @click(:animate)); avatar=true, @showif("!animate")),
+          itemsection(btn(; dense=true, flat=true, round=true, icon="pause", @click("animate = false")); avatar=true, @showif(:animate)),
+          itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="blue", labelalways=true)),
+        ], style="position: fixed; bottom: 0; right: 0; padding: 12px 40px; background-color: transparent; width: 80%; display: flex; "),]
     ),
   ],
   view="hHh lpR fFf",
