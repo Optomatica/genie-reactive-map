@@ -94,15 +94,32 @@ using .Utils: scale_array, map_fields
     )]
   end
 
-  @onbutton animate begin
-    first_year = model.filter_range[].range[1]
-    last_year = model.filter_range[].range[end]
-    years_diff = last_year - first_year
-    for i in first_year:(model.max_year[]-years_diff)
-      model.filter_range[] = RangeData(i:i+years_diff)
-      sleep(0.5)
+  @onchange animate begin
+
+    if animate
+
+      function cb(_)
+        first_year = model.filter_range[].range[1] + 1
+        last_year = model.filter_range[].range[end] + 1
+        years_diff = last_year - first_year
+
+        if last_year > model.max_year[]
+          first_year = model.min_year[]
+          last_year = model.min_year[] + years_diff
+        end
+
+        model.filter_range[] = RangeData(first_year:last_year)
+      end
+
+      global t = Timer(cb, 0.1, interval=0.5)
+      wait(t)
+    else
+      close(t)
     end
+
   end
+
+
 
 end
 
