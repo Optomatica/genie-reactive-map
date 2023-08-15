@@ -20,12 +20,18 @@ end
 function map_fields(df::DataFrame)
   input_cols = names(df)
   latInd = findfirst(x -> occursin("lat", lowercase(x)), input_cols)
-  lonInd = findfirst(x -> occursin("lon", lowercase(x)), input_cols)
+  lonInd = findfirst(x -> occursin(r"lon|lng", lowercase(x)), input_cols)
   dateInd = findfirst(x -> occursin("date", lowercase(x)), input_cols)
-  years = get_date_ranges(df[!, dateInd])
+
   new_data = copy(df)
-  new_data[!, [:Latitude, :Longitude, :Date]] = df[:, [latInd, lonInd, dateInd]]
-  new_data[!, :Date] = years
+  new_data[!, :Latitude] = df[!, latInd]
+  new_data[!, :Longitude] = df[!, lonInd]
+  if (!isnothing(dateInd))
+    years = get_date_ranges(df[!, dateInd])
+    new_data[!, :Date] = years
+  else
+    new_data[!, :Date] = repeat([Dates.year(Dates.now())], nrow(df))
+  end
   new_data
 end
 

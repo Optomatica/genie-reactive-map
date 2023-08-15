@@ -14,25 +14,43 @@ ui = () -> StippleUI.layout(
         item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
         item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true)),
         item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
-        btn("Show Data", color="primary", @click("data_show_dialog = true")),
+        item(btn("Show Data", color="primary", @click("data_show_dialog = true"))),
+        item(btn("Show Sample Data", color="primary", @click("show_sample_data_dialog = true"))),
         Html.div(class="q-pa-md q-gutter-sm", [
           StippleUI.dialog(:data_show_dialog, [
               card([
                 Genie.Renderer.Html.table(title="Random numbers", :data_view; pagination=:data_pagination, style="height: 100%;")
               ])
             ], full__height=true, full__width=true)
+        ]),
+        Html.div(class="q-pa-md q-gutter-sm", [
+          StippleUI.dialog(:show_sample_data_dialog, [
+            card([
+              card_section(
+                quasar(:btn__toggle, v__model=:choosen_sample_data, options=:sample_data)
+              ),
+              card_actions(
+                [
+                  btn("Close", color="primary", @click(:confirm_cancel_sample_data)),
+                  btn("Show", color="primary", @click(:confirm_choose_sample_data))],
+                align="right"
+              )
+            ])
+          ])
         ])
       ],
       var"v-model"=:left_drawer_open, side="left", bordered=true, overlay=true
     ),
     page_container(
-      [plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height"),
+      [
+      plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height"),
       Genie.Renderer.Html.div(
         [
           itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right", @click(:animate)); avatar=true, @showif("!animate")),
           itemsection(btn(; dense=true, flat=true, round=true, icon="pause", @click("animate = false")); avatar=true, @showif(:animate)),
           itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="blue", labelalways=true)),
-        ], style="position: fixed; bottom: 0; right: 0; padding: 12px 40px; background-color: transparent; width: 80%; display: flex; "),]
+        ], style="position: fixed; bottom: 0; right: 0; padding: 12px 40px; background-color: transparent; width: 80%; display: flex; "),
+    ]
     ),
   ],
   view="hHh lpR fFf",

@@ -37,6 +37,23 @@ Base.@kwdef struct DataModel
   _show_dialog::R{Bool} = false
 end
 
+struct SampleData
+  label::String
+  value::String
+end
+Base.@kwdef struct SampleDataModel
+  show_sample_data_dialog::R{Bool} = false
+  sample_data::Vector{SampleData} = [
+    SampleData("Earthquakes", "./data/earthquakes.csv"),
+    SampleData("World Airports", "./data/World_Airports.csv"),
+    SampleData("AQI and Lat Long of Countries", "./data/AQI and Lat Long of Countries.csv")
+  ]
+  choosen_sample_data::R{Union{String,Nothing}} = nothing
+  confirm_choose_sample_data::R{Bool} = false
+  confirm_cancel_sample_data::R{Bool} = false
+end
+
+
 mutable struct ConfigType
   mapboxAccessToken::String
 end

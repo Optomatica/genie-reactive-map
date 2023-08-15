@@ -6,7 +6,7 @@ using CSV
 include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
-using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel
+using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel, SampleDataModel
 using .Utils: scale_array, map_fields
 @genietools
 
@@ -21,6 +21,7 @@ using .Utils: scale_array, map_fields
   @mixin data::DataModel
   @mixin ScatterModel
   @mixin LayoutModel
+  @mixin SampleDataModel
 
   @out color_scale_options = COLOR_SCALE_OPTIONS
   @out mapbox_styles = MAPBOX_STYLES
@@ -40,7 +41,8 @@ using .Utils: scale_array, map_fields
 
   @onchange data_processed begin
     features = names(data_processed)
-    selected_feature = features[1]
+    scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
+    selected_feature = features[scalar_features[1]]
 
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])
@@ -53,7 +55,14 @@ using .Utils: scale_array, map_fields
       color=data_processed[!, selected_feature],
       colorscale=marker.colorscale
     )
+  end
 
+  @onchange selected_feature begin
+    marker = attr(
+      size=scale_array(data_processed[!, selected_feature]),
+      color=data_processed[!, selected_feature],
+      colorscale=marker.colorscale
+    )
   end
 
   @onchange min_year, max_year begin
@@ -122,6 +131,15 @@ using .Utils: scale_array, map_fields
     mapbox = attr(
       style=mapbox_style
     )
+  end
+
+  @onbutton confirm_choose_sample_data begin
+    show_sample_data_dialog = false
+    model.data_input[] = CSV.read(choosen_sample_data, DataFrame)
+  end
+
+  @onbutton confirm_cancel_sample_data begin
+    show_sample_data_dialog = false
   end
 end
 
