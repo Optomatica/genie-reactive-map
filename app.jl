@@ -6,10 +6,9 @@ using CSV
 include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
-using .Constants: current_year, ScatterModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES
+using .Constants: current_year, ScatterModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel
 using .Utils: scale_array, map_fields
 @genietools
-
 
 @app Model begin
   @in left_drawer_open = true
@@ -19,15 +18,14 @@ using .Utils: scale_array, map_fields
   @in animate = false
   @in mapbox_style = "open-street-map"
 
+  @mixin data::DataModel
   @mixin ScatterModel
 
   @out color_scale_options = COLOR_SCALE_OPTIONS
   @out mapbox_styles = MAPBOX_STYLES
-  @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = current_year
   @out features::Array{String} = []
-  @out data = DataFrame()
   @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(
     showlegend=false,
@@ -43,19 +41,20 @@ using .Utils: scale_array, map_fields
     "***REMOVED***"
   )
 
-  @onchange input_data begin
-    data = map_fields(input_data)
+  @onchange data_input begin
+    data_processed = map_fields(data_input)
+    data_view = DataTable(DataFrame(data_input), DataTableOptions(columns=map(col -> Column(col), names(data_input))))
   end
 
-  @onchange data begin
-    features = names(data)
+  @onchange data_processed begin
+    features = names(data_processed)
     selected_feature = features[1]
 
-    lon = data[!, "Longitude"]
-    lat = data[!, "Latitude"]
+    lon = data_processed[!, "Longitude"]
+    lat = data_processed[!, "Latitude"]
 
-    min_year = minimum(data[!, "Date"])
-    max_year = maximum(data[!, "Date"])
+    min_year = minimum(data_processed[!, "Date"])
+    max_year = maximum(data_processed[!, "Date"])
 
   end
 
@@ -65,8 +64,8 @@ using .Utils: scale_array, map_fields
 
   @onchange selected_feature begin
     marker = attr(
-      size=scale_array(data[!, selected_feature]),
-      color=data[!, selected_feature],
+      size=scale_array(data_processed[!, selected_feature]),
+      color=data_processed[!, selected_feature],
       colorscale="Greens"
     )
   end
@@ -80,14 +79,12 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange filter_range begin
-    filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data)
+    filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
     marker = attr(
       size=scale_array(filtered_data[!, selected_feature]),
       color=filtered_data[!, selected_feature],
       colorscale=marker.colorscale
     )
-    # lon = filtered_data[!, "Longitude"],
-    # lat = filtered_data[!, "Latitude"]
   end
 
   @onchange lon, lat, marker begin
@@ -145,7 +142,7 @@ end
 route("/", method=POST) do
   files = Genie.Requests.filespayload()
   f = first(files)
-  model.input_data[] = CSV.read(f[2].data, DataFrame)
+  model.data_input[] = CSV.read(f[2].data, DataFrame)
   return "Perfecto!"
 end
 

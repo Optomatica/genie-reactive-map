@@ -18,14 +18,17 @@ ui = () -> StippleUI.layout(
         item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
         item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true)),
         item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
+        btn("Alert", color="primary", @click("data_show_dialog = true")),
       ],
       var"v-model"=:left_drawer_open, side="left", bordered=true, overlay=true
     ),
     page_container(
-      plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height")
+      [plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height"),]
     ),
   ],
   view="hHh lpR fFf",
   class="window-height"
 )
+
+# Genie.Renderer.Html.table(title="Random numbers", :data_view; pagination=:data_pagination, style="height: 350px;")
 
