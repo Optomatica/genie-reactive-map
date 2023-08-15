@@ -1,5 +1,5 @@
 module Constants
-using Dates, GenieFramework.Stipple, PlotlyBase
+using Dates, GenieFramework, PlotlyBase, DataFrames
 
 
 const current_year = Dates.year(now())
@@ -15,6 +15,14 @@ Base.@kwdef struct ScatterModel
     color=[],
     colorscale="Greens"
   )
+end
+
+Base.@kwdef struct DataModel
+  _input::R{DataFrame} = DataFrame()
+  _processed::R{DataFrame} = DataFrame()
+  _view::R{DataTable} = DataTable()
+  _pagination::DataTablePagination = DataTablePagination(rows_per_page=50)
+  _show_dialog::R{Bool} = false
 end
 
 mutable struct ConfigType
