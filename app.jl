@@ -6,7 +6,7 @@ using CSV
 include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
-using .Constants: current_year, ScatterModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel
+using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel
 using .Utils: scale_array, map_fields
 @genietools
 
@@ -20,6 +20,7 @@ using .Utils: scale_array, map_fields
 
   @mixin data::DataModel
   @mixin ScatterModel
+  @mixin LayoutModel
 
   @out color_scale_options = COLOR_SCALE_OPTIONS
   @out mapbox_styles = MAPBOX_STYLES
@@ -27,16 +28,7 @@ using .Utils: scale_array, map_fields
   @out max_year = current_year
   @out features::Array{String} = []
   @out trace = [scattermapbox()]
-  @out layout = PlotlyBase.Layout(
-    showlegend=false,
-    margin=attr(l=0, r=0, t=0, b=0),
-    mapbox=attr(
-      style="open-street-map",),
-    geo=attr(
-      showframe=false,
-      showcoastlines=false,
-      projection=attr(type="natural earth")
-    ))
+  @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0))
   @out config = ConfigType(
     "***REMOVED***"
   )
@@ -50,24 +42,22 @@ using .Utils: scale_array, map_fields
     features = names(data_processed)
     selected_feature = features[1]
 
+    min_year = minimum(data_processed[!, "Date"])
+    max_year = maximum(data_processed[!, "Date"])
+
     lon = data_processed[!, "Longitude"]
     lat = data_processed[!, "Latitude"]
 
-    min_year = minimum(data_processed[!, "Date"])
-    max_year = maximum(data_processed[!, "Date"])
+    marker = attr(
+      size=scale_array(data_processed[!, selected_feature]),
+      color=data_processed[!, selected_feature],
+      colorscale=marker.colorscale
+    )
 
   end
 
   @onchange min_year, max_year begin
     filter_range = RangeData(min_year:max_year)
-  end
-
-  @onchange selected_feature begin
-    marker = attr(
-      size=scale_array(data_processed[!, selected_feature]),
-      color=data_processed[!, selected_feature],
-      colorscale="Greens"
-    )
   end
 
   @onchange color_scale begin
@@ -95,6 +85,15 @@ using .Utils: scale_array, map_fields
     )]
   end
 
+  @onchange mapbox begin
+    layout = PlotlyBase.Layout(
+      showlegend=showlegend,
+      margin=margin,
+      mapbox=mapbox,
+      geo=geo
+    )
+  end
+
   @onchange animate begin
 
     if animate
@@ -120,16 +119,9 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange mapbox_style begin
-    layout = PlotlyBase.Layout(
-      showlegend=false,
-      width="1800",
-      mapbox=attr(
-        style=mapbox_style,),
-      geo=attr(
-        showframe=false,
-        showcoastlines=false,
-        projection=attr(type="natural earth")
-      ))
+    mapbox = attr(
+      style=mapbox_style
+    )
   end
 end
 

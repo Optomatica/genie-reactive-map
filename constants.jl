@@ -17,6 +17,18 @@ Base.@kwdef struct ScatterModel
   )
 end
 
+Base.@kwdef struct LayoutModel
+  showlegend::Bool = true
+  margin::PlotlyBase.PlotlyAttribute = attr(l=0, r=0, t=0, b=0)
+  mapbox::R{PlotlyBase.PlotlyAttribute} = attr(style="open-street-map")
+  geo::PlotlyBase.PlotlyAttribute = attr(
+    showframe=false,
+    showcoastlines=false,
+    projection=attr(type="natural earth")
+  )
+end
+
+
 Base.@kwdef struct DataModel
   _input::R{DataFrame} = DataFrame()
   _processed::R{DataFrame} = DataFrame()
