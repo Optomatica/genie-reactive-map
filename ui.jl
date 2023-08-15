@@ -8,7 +8,7 @@ ui = () -> StippleUI.layout(
     ),
     ),
     drawer(
-      [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:200px"),
+      [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
         # item([itemsection(p("Marker color")), itemsection(input(type="color", var"v-model"=:selected_color, label="Color"))]),
         item([
           itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right", @click(:animate)); avatar=true, @showif("!animate")),
@@ -17,11 +17,12 @@ ui = () -> StippleUI.layout(
         ]),
         item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
         item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true)),
+        item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
       ],
-      var"v-model"=:left_drawer_open, side="left", width=200, bordered=true, overlay=true
+      var"v-model"=:left_drawer_open, side="left", bordered=true, overlay=true
     ),
     page_container(
-      plot(:trace, layout=:layout, class="window-height")
+      plot(:trace, layout=:layout, config=:config, configtype=ConfigType, class="window-height")
     ),
   ],
   view="hHh lpR fFf",

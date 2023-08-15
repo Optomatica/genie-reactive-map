@@ -6,7 +6,7 @@ using CSV
 include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
-using .Constants: current_year, ScatterModel, COLOR_SCALE_OPTIONS
+using .Constants: current_year, ScatterModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES
 using .Utils: scale_array, map_fields
 @genietools
 
@@ -17,10 +17,12 @@ using .Utils: scale_array, map_fields
   @in selected_feature::Union{Nothing,String} = nothing
   @in color_scale = "Greens"
   @in animate = false
+  @in mapbox_style = "open-street-map"
 
   @mixin ScatterModel
 
   @out color_scale_options = COLOR_SCALE_OPTIONS
+  @out mapbox_styles = MAPBOX_STYLES
   @out input_data = DataFrame()
   @out min_year = 0
   @out max_year = current_year
@@ -28,17 +30,19 @@ using .Utils: scale_array, map_fields
   @out data = DataFrame()
   @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(
-    title="World Map",
     showlegend=false,
     width="1800",
     mapbox=attr(
-      style="open-street-map",
-    ),
+      style="open-street-map",),
     geo=attr(
       showframe=false,
       showcoastlines=false,
       projection=attr(type="natural earth")
     ))
+  @out config = ConfigType(
+    "***REMOVED***"
+  )
+
   @onchange input_data begin
     data = map_fields(input_data)
   end
@@ -116,11 +120,20 @@ using .Utils: scale_array, map_fields
     else
       close(t)
     end
-
   end
 
-
-
+  @onchange mapbox_style begin
+    layout = PlotlyBase.Layout(
+      showlegend=false,
+      width="1800",
+      mapbox=attr(
+        style=mapbox_style,),
+      geo=attr(
+        showframe=false,
+        showcoastlines=false,
+        projection=attr(type="natural earth")
+      ))
+  end
 end
 
 
