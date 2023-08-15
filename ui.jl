@@ -14,7 +14,14 @@ ui = () -> StippleUI.layout(
         item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
         item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true)),
         item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
-        btn("Alert", color="primary", @click("data_show_dialog = true")),
+        btn("Show Data", color="primary", @click("data_show_dialog = true")),
+        Html.div(class="q-pa-md q-gutter-sm", [
+          StippleUI.dialog(:data_show_dialog, [
+              card([
+                Genie.Renderer.Html.table(title="Random numbers", :data_view; pagination=:data_pagination, style="height: 100%;")
+              ])
+            ], full__height=true, full__width=true)
+        ])
       ],
       var"v-model"=:left_drawer_open, side="left", bordered=true, overlay=true
     ),
@@ -32,5 +39,5 @@ ui = () -> StippleUI.layout(
   class="window-height"
 )
 
-# Genie.Renderer.Html.table(title="Random numbers", :data_view; pagination=:data_pagination, style="height: 350px;")
+
 
