@@ -41,7 +41,7 @@ using .Utils: scale_array, map_fields
 
   @onchange data_processed begin
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
-    features = names(data_processed)[scalar_features]
+    features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
     selected_feature = features[1]
 
     min_year = minimum(data_processed[!, "Date"])

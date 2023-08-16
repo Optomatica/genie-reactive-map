@@ -17,7 +17,7 @@ Base.@kwdef struct ScatterModel
     colorscale="Greens",
     showscale=true
   )
-  hovertemplate::String = "%{customdata}%"
+  hovertemplate::String = "<span>%{customdata}</span>"
 end
 
 Base.@kwdef struct LayoutModel
