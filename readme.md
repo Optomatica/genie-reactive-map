@@ -3,4 +3,19 @@ I personally find dealing with XML like syntax in `ui.jl.html` is much better be
 
 ### Hot reloading does not really work
 
+### @onchange example
+documentation is not actually right
+```
+  @app begin
+      # reactive variables taking their value from the UI
+      @in N = 0
+      @in M = 0
+      @out result = 0
+      # reactive code to be executed when N changes
+      @onchange N M begin
+          result = 10*N*M
+      end
+  end
+```
+
 

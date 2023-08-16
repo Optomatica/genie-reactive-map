@@ -10,12 +10,14 @@ const MAPBOX_STYLES = ["white-bg", "open-street-map", "carto-positron", "carto-d
 Base.@kwdef struct ScatterModel
   lat::R{Vector{Float64}} = []
   lon::R{Vector{Float64}} = []
+  customdata::R{Vector} = []
   marker::R{PlotlyBase.PlotlyAttribute} = attr(
     size=[],
     color=[],
     colorscale="Greens",
     showscale=true
   )
+  hovertemplate::String = "%{customdata}%"
 end
 
 Base.@kwdef struct LayoutModel
@@ -46,7 +48,7 @@ Base.@kwdef struct SampleDataModel
   show_sample_data_dialog::R{Bool} = false
   sample_data::Vector{SampleData} = [
     SampleData("Earthquakes", "./data/earthquakes.csv"),
-    SampleData("World Airports", "./data/World_Airports.csv"),
+    # SampleData("World Airports", "./data/World_Airports.csv"),
     SampleData("AQI and Lat Long of Countries", "./data/AQI and Lat Long of Countries.csv")
   ]
   choosen_sample_data::R{Union{String,Nothing}} = nothing

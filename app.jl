@@ -40,15 +40,16 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange data_processed begin
-    features = names(data_processed)
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
-    selected_feature = features[scalar_features[1]]
+    features = names(data_processed)[scalar_features]
+    selected_feature = features[1]
 
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])
 
     lon = data_processed[!, "Longitude"]
     lat = data_processed[!, "Latitude"]
+    customdata = data_processed[!, selected_feature]
 
     marker = attr(
       size=scale_array(data_processed[!, selected_feature]),
@@ -59,6 +60,7 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange selected_feature begin
+    customdata = data_processed[!, selected_feature]
     marker = attr(
       size=scale_array(data_processed[!, selected_feature]),
       color=data_processed[!, selected_feature],
@@ -82,6 +84,7 @@ using .Utils: scale_array, map_fields
 
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
+    customdata = filtered_data[!, selected_feature]
     marker = attr(
       size=scale_array(filtered_data[!, selected_feature]),
       color=filtered_data[!, selected_feature],
@@ -90,11 +93,13 @@ using .Utils: scale_array, map_fields
     )
   end
 
-  @onchange lon, lat, marker begin
+  @onchange lon, lat, marker, customdata begin
     trace = [scattermapbox(
       lat=lat,
       lon=lon,
-      marker=marker
+      marker=marker,
+      customdata=customdata,
+      hovertemplate=hovertemplate
     )]
   end
 
