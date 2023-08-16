@@ -7,7 +7,7 @@ include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
 using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel, SampleDataModel
-using .Utils: scale_array, map_fields
+using .Utils: scale_array, map_fields, generate_tooltip_text
 @genietools
 
 @app Model begin
@@ -30,6 +30,7 @@ using .Utils: scale_array, map_fields
   @out features::Array{String} = []
   @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0))
+  @out tooltip_text::Array{String} = []
   @out config = ConfigType(
     "***REMOVED***"
   )
@@ -50,7 +51,7 @@ using .Utils: scale_array, map_fields
     lon = data_processed[!, "Longitude"]
     lat = data_processed[!, "Latitude"]
     customdata = data_processed[!, selected_feature]
-
+    tooltip_text = generate_tooltip_text(data_processed)
     marker = attr(
       size=scale_array(data_processed[!, selected_feature]),
       color=data_processed[!, selected_feature],
@@ -85,6 +86,7 @@ using .Utils: scale_array, map_fields
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
     customdata = filtered_data[!, selected_feature]
+    tooltip_text = generate_tooltip_text(filtered_data)
     marker = attr(
       size=scale_array(filtered_data[!, selected_feature]),
       color=filtered_data[!, selected_feature],
@@ -93,13 +95,12 @@ using .Utils: scale_array, map_fields
     )
   end
 
-  @onchange lon, lat, marker, customdata begin
+  @onchange lon, lat, marker, tooltip_text begin
     trace = [scattermapbox(
       lat=lat,
       lon=lon,
       marker=marker,
-      customdata=customdata,
-      hovertemplate=hovertemplate
+      text=tooltip_text,
     )]
   end
 

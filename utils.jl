@@ -35,4 +35,17 @@ function map_fields(df::DataFrame)
   new_data
 end
 
+function generate_tooltip_text(df::DataFrame)
+
+  col_names = names(df)
+
+  tooltip_text = []
+  for (_, row) in enumerate(eachrow(df))
+    push!(tooltip_text, join(["<b>$col</b>: $(row[col])<br>" for col in col_names]))
+
+  end
+  tooltip_text
 end
+
+end
+
