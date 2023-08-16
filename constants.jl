@@ -13,7 +13,8 @@ Base.@kwdef struct ScatterModel
   marker::R{PlotlyBase.PlotlyAttribute} = attr(
     size=[],
     color=[],
-    colorscale="Greens"
+    colorscale="Greens",
+    showscale=true
   )
 end
 

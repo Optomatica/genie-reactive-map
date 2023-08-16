@@ -53,7 +53,8 @@ using .Utils: scale_array, map_fields
     marker = attr(
       size=scale_array(data_processed[!, selected_feature]),
       color=data_processed[!, selected_feature],
-      colorscale=marker.colorscale
+      colorscale=marker.colorscale,
+      showscale=marker.showscale
     )
   end
 
@@ -61,7 +62,8 @@ using .Utils: scale_array, map_fields
     marker = attr(
       size=scale_array(data_processed[!, selected_feature]),
       color=data_processed[!, selected_feature],
-      colorscale=marker.colorscale
+      colorscale=marker.colorscale,
+      showscale=marker.showscale
     )
   end
 
@@ -73,7 +75,8 @@ using .Utils: scale_array, map_fields
     marker = attr(
       size=marker.size,
       color=marker.color,
-      colorscale=color_scale
+      colorscale=color_scale,
+      showscale=marker.showscale
     )
   end
 
@@ -82,7 +85,8 @@ using .Utils: scale_array, map_fields
     marker = attr(
       size=scale_array(filtered_data[!, selected_feature]),
       color=filtered_data[!, selected_feature],
-      colorscale=marker.colorscale
+      colorscale=marker.colorscale,
+      showscale=marker.showscale
     )
   end
 
@@ -99,7 +103,7 @@ using .Utils: scale_array, map_fields
       showlegend=showlegend,
       margin=margin,
       mapbox=mapbox,
-      geo=geo
+      geo=geo,
     )
   end
 
