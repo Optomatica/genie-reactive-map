@@ -8,7 +8,7 @@ ui = () -> StippleUI.layout(
     ),
     ),
     drawer(
-      [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
+      Html.div(class="q-pa-md", [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
         # item([itemsection(p("Marker color")), itemsection(input(type="color", var"v-model"=:selected_color, label="Color"))]),
 
         item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
