@@ -720,7 +720,9 @@ version = "1.0.1"
 
 [[deps.TidierDates]]
 deps = ["Dates", "Documenter", "Reexport"]
-git-tree-sha1 = "ba1e0e3e7c99cdccb7c8d9d568e413283323716f"
+git-tree-sha1 = "2c8e0b15a0f13dcc38993ef49c8a7b52de6136d5"
+repo-rev = "main-1"
+repo-url = "https://github.com/ms10596/TidierDates.jl.git"
 uuid = "20186a3f-b5d3-468e-823e-77aae96fe2d8"
 version = "0.1.0"
 

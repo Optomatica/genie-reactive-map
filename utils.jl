@@ -26,11 +26,13 @@ function map_fields(df::DataFrame)
   new_data = copy(df)
   new_data[!, :Latitude] = df[!, latInd]
   new_data[!, :Longitude] = df[!, lonInd]
+
+  dropmissing!(new_data, [:Longitude, :Latitude])
   if (!isnothing(dateInd))
-    years = get_date_ranges(df[!, dateInd])
+    years = get_date_ranges(new_data[!, dateInd])
     new_data[!, :Date] = years
   else
-    new_data[!, :Date] = repeat([Dates.year(Dates.now())], nrow(df))
+    new_data[!, :Date] = repeat([Dates.year(Dates.now())], nrow(new_data))
   end
   new_data
 end
