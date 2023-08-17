@@ -12,7 +12,13 @@ function scale_array(x::Vector{<:Number})
 end
 
 function get_date_ranges(dates::Vector)
-  parsed_dates = dmy.(dates)
+  parsed_dates = []
+  try
+    parsed_dates = dmy.(dates)
+  catch
+    parsed_dates = mdy.(dates)
+  end
+
   parsed_dates[isnothing.(parsed_dates)] = dates[isnothing.(parsed_dates)] .|> ymd
   parsed_dates .|> Dates.year
 end
@@ -23,11 +29,11 @@ function map_fields(df::DataFrame)
   lonInd = findfirst(x -> occursin(r"lon|lng", lowercase(x)), input_cols)
   dateInd = findfirst(x -> occursin("date", lowercase(x)), input_cols)
 
-  new_data = copy(df)
-  new_data[!, :Latitude] = df[!, latInd]
-  new_data[!, :Longitude] = df[!, lonInd]
+  new_data = dropmissing(df, [latInd, lonInd])
+  new_data[!, :Latitude] = new_data[!, latInd]
+  new_data[!, :Longitude] = new_data[!, lonInd]
 
-  dropmissing!(new_data, [:Longitude, :Latitude])
+
   if (!isnothing(dateInd))
     years = get_date_ranges(new_data[!, dateInd])
     new_data[!, :Date] = years

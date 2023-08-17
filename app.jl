@@ -43,25 +43,30 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   @onchange data_processed begin
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
     features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
-    selected_feature = features[1]
+    if (length(features) > 0)
+      selected_feature = features[1]
+    end
+
 
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])
 
     lon = data_processed[!, "Longitude"]
     lat = data_processed[!, "Latitude"]
-    customdata = data_processed[!, selected_feature]
     tooltip_text = generate_tooltip_text(data_processed)
-    marker = attr(
-      size=scale_array(data_processed[!, selected_feature]),
-      color=data_processed[!, selected_feature],
+    _marker = attr(
       colorscale=marker.colorscale,
       showscale=marker.showscale
     )
+    if (!isnothing(selected_feature))
+      _marker.size = scale_array(data_processed[!, selected_feature])
+      _marker.color = data_processed[!, selected_feature]
+    end
+
+    marker = _marker
   end
 
   @onchange selected_feature begin
-    customdata = data_processed[!, selected_feature]
     marker = attr(
       size=scale_array(data_processed[!, selected_feature]),
       color=data_processed[!, selected_feature],
@@ -85,14 +90,16 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
-    customdata = filtered_data[!, selected_feature]
     tooltip_text = generate_tooltip_text(filtered_data)
-    marker = attr(
-      size=scale_array(filtered_data[!, selected_feature]),
-      color=filtered_data[!, selected_feature],
+    _marker = attr(
       colorscale=marker.colorscale,
       showscale=marker.showscale
     )
+    if (!isnothing(selected_feature))
+      _marker.size = scale_array(filtered_data[!, selected_feature])
+      _marker.color = filtered_data[!, selected_feature]
+    end
+    marker = _marker
   end
 
   @onchange lon, lat, marker, tooltip_text begin

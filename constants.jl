@@ -10,14 +10,10 @@ const MAPBOX_STYLES = ["white-bg", "open-street-map", "carto-positron", "carto-d
 Base.@kwdef struct ScatterModel
   lat::R{Vector{Float64}} = []
   lon::R{Vector{Float64}} = []
-  customdata::R{Vector} = []
   marker::R{PlotlyBase.PlotlyAttribute} = attr(
-    size=[],
-    color=[],
     colorscale="Greens",
     showscale=true
   )
-  hovertemplate::String = "<span>%{customdata}</span>"
 end
 
 Base.@kwdef struct LayoutModel
