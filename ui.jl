@@ -3,7 +3,7 @@ ui = () -> StippleUI.layout(
     quasar(:header, toolbar(
       [
       btn(; dense=true, flat=true, round=true, icon="menu", @click("left_drawer_open = !left_drawer_open")),
-      toolbartitle("World Map")
+      toolbartitle("Genie Reactive Map")
     ],
     ),
     ),

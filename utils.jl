@@ -37,7 +37,7 @@ end
 
 function generate_tooltip_text(df::DataFrame)
 
-  col_names = names(df)
+  col_names = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(df))
 
   tooltip_text = []
   for (_, row) in enumerate(eachrow(df))
