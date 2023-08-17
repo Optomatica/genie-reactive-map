@@ -27,7 +27,7 @@ ui = () -> StippleUI.layout(
           StippleUI.dialog(:show_sample_data_dialog, [
             card([
               card_section(
-                quasar(:btn__toggle, v__model=:choosen_sample_data, options=:sample_data)
+                quasar(:btn__toggle, v__model=:choosen_sample_data, options=:sample_data, style="flex-wrap: wrap")
               ),
               card_actions(
                 [
@@ -39,7 +39,7 @@ ui = () -> StippleUI.layout(
           ])
         ])
       ],
-      var"v-model"=:left_drawer_open, side="left", bordered=true, overlay=true
+      v__model=:left_drawer_open, side="left", bordered=true, overlay=true
     ),
     page_container(
       [
