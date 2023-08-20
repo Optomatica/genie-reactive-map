@@ -19,7 +19,7 @@ ui = () -> StippleUI.layout(
         Html.div(class="q-pa-md q-gutter-sm", [
           StippleUI.dialog(:data_show_dialog, [
               card([
-                Genie.Renderer.Html.table(title="Random numbers", :data_input; pagination=:data_pagination, style="height: 100%;")
+                Genie.Renderer.Html.table(title="View Data", :data_input; pagination=:data_pagination, style="height: 100%;")
               ])
             ], full__height=true, full__width=true)
         ]),
