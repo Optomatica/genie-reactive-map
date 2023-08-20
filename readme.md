@@ -13,6 +13,7 @@ or by providing model name
 end
 ```
 The model name is essential in our case so that we can initialize the model in the `GET` request and use it after that.
+
 #### How does communication work between the model and the UI?
 using websockets. The model is the server and the UI is the client. The UI sends a message to the model and the model responds with a message. The message is a JSON object that contains the name of the reactive variable and its value. The UI then updates the value of the reactive variable in the model. The model then triggers the reactive code if there is any.
 
