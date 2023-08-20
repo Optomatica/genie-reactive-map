@@ -11,10 +11,10 @@ ui = () -> StippleUI.layout(
       Html.div(class="q-pa-md", [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
         # item([itemsection(p("Marker color")), itemsection(input(type="color", var"v-model"=:selected_color, label="Color"))]),
 
-        item(Genie.Renderer.Html.select(:selected_feature, options=:features, label="Feature", useinput=true)),
+        item(Genie.Renderer.Html.select(:selected_feature, clearable=true, options=:features, label="Feature", useinput=true)),
         item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true)),
         item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
-        item(btn("Show Data", color="primary", icon="view_list", style="font-weight: 600; text-transform: none;", @click("data_show_dialog = true")), @showif("lon.length > 0")),
+        item(btn("Show Data", color="primary", icon="view_list", style="font-weight: 600; text-transform: none;", @click("data_show_dialog = true")), @showif("plot_data.lon.length > 0")),
         item(btn("Choose Sample Data", color="primary", icon="grid_view", style="background-color: rgb(239,239,239); font-weight: 600; text-transform: none;", flat=true, @click("show_sample_data_dialog = true"))),
         Html.div(class="q-pa-md q-gutter-sm", [
           StippleUI.dialog(:data_show_dialog, [
