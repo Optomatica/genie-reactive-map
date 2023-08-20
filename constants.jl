@@ -8,11 +8,10 @@ const MAPBOX_STYLES = ["white-bg", "open-street-map", "carto-positron", "carto-d
 
 
 Base.@kwdef struct ScatterModel
-  lat::R{Vector{Float64}} = []
-  lon::R{Vector{Float64}} = []
+  plot_data::R{Dict{Symbol,Any}} = Dict(:lat => [], :lon => [])
   marker::R{PlotlyBase.PlotlyAttribute} = attr(
     colorscale="Greens",
-    showscale=true
+    showscale=false
   )
 end
 

@@ -40,35 +40,30 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
     features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
-    # if (length(features) > 0)
-    #   selected_feature = features[1]
-    # end
 
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])
 
-    lon = data_processed[!, "Longitude"]
-    lat = data_processed[!, "Latitude"]
+    plot_data = Dict(:lat => data_processed[!, "Latitude"], :lon => data_processed[!, "Longitude"])
     tooltip_text = generate_tooltip_text(data_processed)
-    _marker = attr()
 
-    if (!isnothing(selected_feature))
-      _marker.size = scale_array(data_processed[!, selected_feature])
-      _marker.color = data_processed[!, selected_feature],
-      _marker.colorscale = marker.colorscale,
-      _marker.showscale = marker.showscale
-    end
-
-    marker = _marker
   end
 
   @onchange selected_feature begin
-    marker = attr(
-      size=scale_array(data_processed[!, selected_feature]),
-      color=data_processed[!, selected_feature],
-      colorscale=marker.colorscale,
-      showscale=marker.showscale
-    )
+    if (!isnothing(selected_feature))
+      marker = attr(
+        size=scale_array(data_processed[!, selected_feature]),
+        color=data_processed[!, selected_feature],
+        colorscale=marker.colorscale,
+        showscale=true
+      )
+
+    else
+      marker = attr(
+        showscale=false
+      )
+    end
+
   end
 
   @onchange min_year, max_year begin
@@ -80,31 +75,29 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
       size=marker.size,
       color=marker.color,
       colorscale=color_scale,
-      showscale=marker.showscale
+      showscale=true
     )
   end
 
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
-    lon = filtered_data[!, "Longitude"]
-    lat = filtered_data[!, "Latitude"]
+
+    plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"])
+
     tooltip_text = generate_tooltip_text(filtered_data)
-    _marker = attr()
     if (!isnothing(selected_feature))
-      _marker.size = scale_array(filtered_data[!, selected_feature])
-      _marker.color = filtered_data[!, selected_feature]
-      _marker.colorscale = marker.colorscale,
-      _marker.showscale = marker.showscale
+      marker = attr(size=scale_array(filtered_data[!, selected_feature]),
+        color=filtered_data[!, selected_feature],
+        colorscale=marker.colorscale,
+        showscale=true)
     end
-    marker = _marker
   end
 
-  @onchange lon, lat, marker, tooltip_text begin
+  @onchange plot_data, marker, tooltip_text begin
     trace = [scattermapbox(
-      lat=lat,
-      lon=lon,
+      plot_data;
       marker=marker,
-      text=tooltip_text,
+      text=tooltip_text
     )]
   end
 
@@ -118,7 +111,6 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 
   @onchange animate begin
-
     if animate
 
       function cb(_)
@@ -134,7 +126,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
         model.filter_range[] = RangeData(first_year:last_year)
       end
 
-      global t = Timer(cb, 0.2, interval=1)
+      global t = Timer(cb, 0.1, interval=0.5)
       wait(t)
     else
       close(t)
