@@ -111,22 +111,23 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 
   @onchange animate begin
-    if animate
 
-      function cb(_)
-        first_year = model.filter_range[].range[1] + 1
-        last_year = model.filter_range[].range[end] + 1
-        years_diff = last_year - first_year
+    function cb(_)
+      first_year = filter_range.range[1] + 1
+      last_year = filter_range.range[end] + 1
+      years_diff = last_year - first_year
 
-        if last_year > model.max_year[]
-          first_year = model.min_year[]
-          last_year = model.min_year[] + years_diff
-        end
-
-        model.filter_range[] = RangeData(first_year:last_year)
+      if last_year > max_year
+        first_year = min_year
+        last_year = min_year + years_diff
       end
 
-      global t = Timer(cb, 0.1, interval=0.5)
+      model.filter_range[] = RangeData(first_year:last_year)
+    end
+
+    if animate
+
+      global t = Timer(cb, 0, interval=0.6)
       wait(t)
     else
       close(t)
