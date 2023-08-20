@@ -40,10 +40,9 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
     features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
-    if (length(features) > 0)
-      selected_feature = features[1]
-    end
-
+    # if (length(features) > 0)
+    #   selected_feature = features[1]
+    # end
 
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])
@@ -51,13 +50,13 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
     lon = data_processed[!, "Longitude"]
     lat = data_processed[!, "Latitude"]
     tooltip_text = generate_tooltip_text(data_processed)
-    _marker = attr(
-      colorscale=marker.colorscale,
-      showscale=marker.showscale
-    )
+    _marker = attr()
+
     if (!isnothing(selected_feature))
       _marker.size = scale_array(data_processed[!, selected_feature])
-      _marker.color = data_processed[!, selected_feature]
+      _marker.color = data_processed[!, selected_feature],
+      _marker.colorscale = marker.colorscale,
+      _marker.showscale = marker.showscale
     end
 
     marker = _marker
@@ -87,14 +86,15 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
   @onchange filter_range begin
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
+    lon = filtered_data[!, "Longitude"]
+    lat = filtered_data[!, "Latitude"]
     tooltip_text = generate_tooltip_text(filtered_data)
-    _marker = attr(
-      colorscale=marker.colorscale,
-      showscale=marker.showscale
-    )
+    _marker = attr()
     if (!isnothing(selected_feature))
       _marker.size = scale_array(filtered_data[!, selected_feature])
       _marker.color = filtered_data[!, selected_feature]
+      _marker.colorscale = marker.colorscale,
+      _marker.showscale = marker.showscale
     end
     marker = _marker
   end
@@ -134,7 +134,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
         model.filter_range[] = RangeData(first_year:last_year)
       end
 
-      global t = Timer(cb, 0.1, interval=0.5)
+      global t = Timer(cb, 0.2, interval=1)
       wait(t)
     else
       close(t)
