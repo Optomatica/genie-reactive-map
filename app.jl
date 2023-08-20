@@ -36,11 +36,8 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   )
 
   @onchange data_input begin
-    data_processed = map_fields(data_input)
-    data_view = DataTable(DataFrame(data_input), DataTableOptions(columns=map(col -> Column(col), names(data_input))))
-  end
+    data_processed = map_fields(data_input.data)
 
-  @onchange data_processed begin
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
     features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
     # if (length(features) > 0)
@@ -152,7 +149,8 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
   @onbutton confirm_choose_sample_data begin
     show_sample_data_dialog = false
-    model.data_input[] = CSV.read(choosen_sample_data, DataFrame)
+    df = CSV.read(choosen_sample_data, DataFrame)
+    model.data_input[] = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
   end
 
   @onbutton confirm_cancel_sample_data begin
@@ -169,7 +167,8 @@ end
 route("/", method=POST) do
   files = Genie.Requests.filespayload()
   f = first(files)
-  model.data_input[] = CSV.read(f[2].data, DataFrame)
+  df = CSV.read(f[2].data, DataFrame)
+  model.data_input[] = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
   return "Perfecto!"
 end
 

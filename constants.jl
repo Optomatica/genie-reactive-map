@@ -29,10 +29,9 @@ end
 
 
 Base.@kwdef struct DataModel
-  _input::R{DataFrame} = DataFrame()
-  _processed::R{DataFrame} = DataFrame()
-  _view::R{DataTable} = DataTable()
-  _pagination::DataTablePagination = DataTablePagination(rows_per_page=50)
+  _input::R{DataTable} = DataTable()
+  _processed::DataFrame = DataFrame()
+  _pagination::R{DataTablePagination} = DataTablePagination(rows_per_page=50)
   _show_dialog::R{Bool} = false
 end
 
