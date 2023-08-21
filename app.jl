@@ -13,7 +13,8 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 @app Model begin
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
-  @in selected_feature::Union{Nothing,String} = nothing
+  @in selected_size_feature::Union{Nothing,String} = nothing
+  @in selected_color_feature::Union{Nothing,String} = nothing
   @in color_scale = "Greens"
   @in animate = false
   @in mapbox_style = "open-street-map"
@@ -49,18 +50,38 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
   end
 
-  @onchange selected_feature begin
-    if (!isnothing(selected_feature))
+  @onchange selected_color_feature begin
+    if (!isnothing(selected_color_feature))
       marker = attr(
-        size=scale_array(data_processed[!, selected_feature]),
-        color=data_processed[!, selected_feature],
+        size=marker.size,
+        color=data_processed[!, selected_color_feature],
         colorscale=marker.colorscale,
         showscale=true
       )
 
     else
       marker = attr(
+        size=marker.size,
         showscale=false
+      )
+    end
+
+  end
+
+  @onchange selected_size_feature begin
+    if (!isnothing(selected_size_feature))
+      marker = attr(
+        size=scale_array(data_processed[!, selected_size_feature]),
+        color=marker.color,
+        colorscale=marker.colorscale,
+        showscale=true
+      )
+
+    else
+      marker = attr(
+        color=marker.color,
+        colorscale=marker.colorscale,
+        showscale=marker.showscale
       )
     end
 
@@ -85,12 +106,24 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
     plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"])
 
     tooltip_text = generate_tooltip_text(filtered_data)
-    if (!isnothing(selected_feature))
-      marker = attr(size=scale_array(filtered_data[!, selected_feature]),
-        color=filtered_data[!, selected_feature],
-        colorscale=marker.colorscale,
-        showscale=true)
+
+    if (!isnothing(selected_size_feature))
+      marker = attr(
+        size=scale_array(filtered_data[!, selected_size_feature]),
+        color=marker.color,
+        colorscale=marker.colorscale
+      )
     end
+
+    if (!isnothing(selected_color_feature))
+      marker = attr(
+        size=marker.size,
+        color=filtered_data[!, selected_color_feature],
+        colorscale=marker.colorscale,
+        showscale=true
+      )
+    end
+
   end
 
   @onchange plot_data, marker, tooltip_text begin
