@@ -31,14 +31,14 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   @out max_year = current_year
   @out features::Array{String} = []
   @out trace = [scattermapbox()]
-  @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0))
+  @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0), mapbox=attr(style="open-street-map", zoom=1.7))
   @out tooltip_text::Array{String} = []
   @out config = ConfigType(
     "***REMOVED***"
   )
 
   @onchange data_input begin
-    data_processed = map_fields(data_input.data)
+    data_processed = data_input.data
 
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
     features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
@@ -52,6 +52,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 
   @onchange selected_color_feature begin
+    data_processed = data_input.data
     if (!isnothing(selected_color_feature))
       marker = attr(
         size=marker.size,
@@ -70,6 +71,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 
   @onchange selected_size_feature begin
+    data_processed = data_input.data
     if (!isnothing(selected_size_feature))
       marker = attr(
         size=scale_array(data_processed[!, selected_size_feature]),
@@ -102,6 +104,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 
   @onchange filter_range begin
+    data_processed = data_input.data
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
 
     plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"])
@@ -139,8 +142,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
     layout = PlotlyBase.Layout(
       showlegend=showlegend,
       margin=margin,
-      mapbox=mapbox,
-      geo=geo,
+      mapbox=mapbox
     )
   end
 
@@ -170,13 +172,14 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
   @onchange mapbox_style begin
     mapbox = attr(
-      style=mapbox_style
+      style=mapbox_style,
+      zoom=mapbox.zoom
     )
   end
 
   @onbutton confirm_choose_sample_data begin
     show_sample_data_dialog = false
-    df = CSV.read(choosen_sample_data, DataFrame)
+    df = CSV.read(choosen_sample_data, DataFrame) |> map_fields
     model.data_input[] = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
   end
 
@@ -194,7 +197,7 @@ end
 route("/", method=POST) do
   files = Genie.Requests.filespayload()
   f = first(files)
-  df = CSV.read(f[2].data, DataFrame)
+  df = CSV.read(f[2].data, DataFrame) |> map_fields
   model.data_input[] = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
   return "Perfecto!"
 end

@@ -18,18 +18,12 @@ end
 Base.@kwdef struct LayoutModel
   showlegend::Bool = true
   margin::PlotlyBase.PlotlyAttribute = attr(l=0, r=0, t=0, b=0)
-  mapbox::R{PlotlyBase.PlotlyAttribute} = attr(style="open-street-map")
-  geo::PlotlyBase.PlotlyAttribute = attr(
-    showframe=false,
-    showcoastlines=false,
-    projection=attr(type="natural earth")
-  )
+  mapbox::R{PlotlyBase.PlotlyAttribute} = attr(style="open-street-map", zoom=1.7)
 end
 
 
 Base.@kwdef struct DataModel
   _input::R{DataTable} = DataTable()
-  _processed::DataFrame = DataFrame()
   _pagination::R{DataTablePagination} = DataTablePagination(rows_per_page=50)
   _show_dialog::R{Bool} = false
 end
