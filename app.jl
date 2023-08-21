@@ -37,6 +37,8 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   )
 
   @onchange data_input begin
+    selected_size_feature = nothing
+    selected_color_feature = nothing
     data_processed = data_input.data
 
     scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
