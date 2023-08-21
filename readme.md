@@ -38,7 +38,7 @@ I personally find dealing with XML like syntax in `ui.jl.html` is much better be
 
 ### Hot reloading does not really work
 
-It only works when changing a statement inside @onchange. Changes in ui.jl and modules do not trigger auto-reload making the dev process to be slower.
+It only works when changing a statement inside @onchange. Changes in ui.jl and modules do not trigger auto-reload making the dev process to be slower. Is there a better way to reload rather than killing julia, restarting it and running the app again?
 
 ### @onchange example
 
@@ -70,6 +70,7 @@ We tested changing @out variable from the ui and it worked.
 
 ### The new documentation is great but it's not complete
 ### Is there a way to make a loading screen? `isprocessing` is not working
+### Can we use @page with an existing model?
 
 ### Resources
 1. https://plotly.com/javascript/mapbox-layers/

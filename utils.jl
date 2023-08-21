@@ -29,18 +29,17 @@ function map_fields(df::DataFrame)
   lonInd = findfirst(x -> occursin(r"lon|lng", lowercase(x)), input_cols)
   dateInd = findfirst(x -> occursin("date", lowercase(x)), input_cols)
 
-  new_data = dropmissing(df, [latInd, lonInd])
-  new_data[!, :Latitude] = new_data[!, latInd]
-  new_data[!, :Longitude] = new_data[!, lonInd]
 
+  dropmissing!(df, [latInd, lonInd])
+  rename!(df, Symbol(input_cols[latInd]) => :Latitude, Symbol(input_cols[lonInd]) => :Longitude)
 
   if (!isnothing(dateInd))
-    years = get_date_ranges(new_data[!, dateInd])
-    new_data[!, :Date] = years
+    years = get_date_ranges(df[!, dateInd])
+    df[!, :Date] = years
   else
-    new_data[!, :Date] = repeat([Dates.year(Dates.now())], nrow(new_data))
+    df[!, :Date] = repeat([Dates.year(Dates.now())], nrow(df))
   end
-  new_data
+  df
 end
 
 function generate_tooltip_text(df::DataFrame)
