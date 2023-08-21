@@ -6,7 +6,7 @@ using CSV
 include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
-using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel, SampleDataModel
+using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel, SampleDataModel, FeatureModel
 using .Utils: scale_array, map_fields
 @genietools
 
@@ -14,8 +14,6 @@ using .Utils: scale_array, map_fields
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in tab_m::R{String} = "styles"
-  @in selected_size_feature::Union{Nothing,String} = nothing
-  @in selected_color_feature::Union{Nothing,String} = nothing
   @in color_scale = "Greens"
   @in animate = false
   @in mapbox_style = "open-street-map"
@@ -24,12 +22,12 @@ using .Utils: scale_array, map_fields
   @mixin ScatterModel
   @mixin LayoutModel
   @mixin SampleDataModel
+  @mixin FeatureModel
 
   @out color_scale_options = COLOR_SCALE_OPTIONS
   @out mapbox_styles = MAPBOX_STYLES
   @out min_year = 0
   @out max_year = current_year
-  @out features::Array{String} = []
   @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0), mapbox=attr(style="open-street-map", zoom=1.7))
   @out config = ConfigType(
@@ -41,8 +39,10 @@ using .Utils: scale_array, map_fields
     selected_color_feature = nothing
     data_processed = data_input.data
 
-    scalar_features = findall(data_processed |> eachcol .|> eltype .<: Number)
-    features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed)[scalar_features])
+    features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed))
+    scalar_features = features[findall(data_processed |> eachcol .|> eltype .<: Number)]
+    categorical_features = features[findall(data_processed |> eachcol .|> eltype .<: String)]
+
 
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])

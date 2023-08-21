@@ -41,6 +41,15 @@ Base.@kwdef struct SampleDataModel
 end
 
 
+Base.@kwdef struct FeatureModel
+  features::R{Array{String}} = []
+  scalar_features::R{Array{String}} = []
+  categorical_features::R{Array{String}} = []
+  selected_size_feature::R{Union{Nothing,String}} = nothing
+  selected_color_feature::R{Union{Nothing,String}} = nothing
+  selected_filter_feature::R{Union{Nothing,String}} = nothing
+end
+
 
 
 mutable struct ConfigType
