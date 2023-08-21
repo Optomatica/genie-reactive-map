@@ -13,6 +13,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 @app Model begin
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
+  @in tab_m::R{String} = "styles"
   @in selected_size_feature::Union{Nothing,String} = nothing
   @in selected_color_feature::Union{Nothing,String} = nothing
   @in color_scale = "Greens"
