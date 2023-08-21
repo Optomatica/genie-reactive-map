@@ -39,6 +39,9 @@ function map_fields(df::DataFrame)
   else
     df[!, :Date] = repeat([Dates.year(Dates.now())], nrow(df))
   end
+
+  df[!, :tooltip_text] = generate_tooltip_text(df)
+
   df
 end
 
