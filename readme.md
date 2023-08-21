@@ -77,3 +77,4 @@ We tested changing @out variable from the ui and it worked.
 2. https://learn.genieframework.com/examples/reactive-ui/mutating-reactive-variables
 3. https://learn.geniecloud.io/guides/implementing-the-app-logic
 4. https://quasar.dev/components/
+5. https://github.com/GenieFramework/StippleUI.jl

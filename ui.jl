@@ -55,7 +55,7 @@ ui = () -> StippleUI.layout(
               card_actions(
                 [
                   btn("Close", color="primary", @click(:confirm_cancel_sample_data)),
-                  btn("Show", color="primary", @click(:confirm_choose_sample_data))],
+                  btn("Show", color="primary", disable! ="!choosen_sample_data", @click(:confirm_choose_sample_data))],
                 align="right"
               )
             ])
