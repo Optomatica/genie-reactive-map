@@ -7,7 +7,7 @@ include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
 using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel, SampleDataModel
-using .Utils: scale_array, map_fields, generate_tooltip_text
+using .Utils: scale_array, map_fields
 @genietools
 
 @app Model begin
@@ -31,7 +31,6 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   @out features::Array{String} = []
   @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0), mapbox=attr(style="open-street-map", zoom=1.7))
-  @out tooltip_text::Array{String} = []
   @out config = ConfigType(
     ENV["MAPBOX_KEY"]
   )
@@ -47,8 +46,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
     min_year = minimum(data_processed[!, "Date"])
     max_year = maximum(data_processed[!, "Date"])
 
-    plot_data = Dict(:lat => data_processed[!, "Latitude"], :lon => data_processed[!, "Longitude"])
-    tooltip_text = generate_tooltip_text(data_processed)
+    plot_data = Dict(:lat => data_processed[!, "Latitude"], :lon => data_processed[!, "Longitude"], :text => data_processed[!, "tooltip_text"])
 
   end
 
@@ -107,11 +105,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   @onchange filter_range begin
     data_processed = data_input.data
     filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
-
-    plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"])
-
-    tooltip_text = generate_tooltip_text(filtered_data)
-
+    plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
     if (!isnothing(selected_size_feature))
       marker = attr(
         size=scale_array(filtered_data[!, selected_size_feature]),
@@ -130,11 +124,10 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
     end
   end
 
-  @onchange plot_data, marker, tooltip_text begin
+  @onchange plot_data, marker begin
     trace = [scattermapbox(
       plot_data;
       marker=marker,
-      text=tooltip_text
     )]
   end
 
@@ -147,7 +140,6 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 
   @onchange animate begin
-
     function cb(_)
       first_year = filter_range.range[1] + 1
       last_year = filter_range.range[end] + 1
@@ -163,7 +155,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
 
     if animate
 
-      global t = Timer(cb, 0, interval=0.6)
+      global t = Timer(cb, 0, interval=0.4)
       wait(t)
     else
       close(t)
