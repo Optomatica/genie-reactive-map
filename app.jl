@@ -12,7 +12,7 @@ using .Utils: scale_array, map_fields
 
 @app Model begin
   @in left_drawer_open = true
-  @in filter_range::RangeData{Int} = RangeData(0:current_year)
+  @in year_range::RangeData{Int} = RangeData(0:current_year)
   @in tab_m::R{String} = "styles"
   @in color_scale = "Greens"
   @in animate = false
@@ -93,7 +93,7 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange min_year, max_year begin
-    filter_range = RangeData(min_year:max_year)
+    year_range = RangeData(min_year:max_year)
   end
 
   @onchange color_scale begin
@@ -105,9 +105,9 @@ using .Utils: scale_array, map_fields
     )
   end
 
-  @onchange filter_range begin
+  @onchange year_range begin
     data_processed = data_input.data
-    filtered_data = filter(i -> i.Date >= first(filter_range.range) && i.Date <= last(filter_range.range), data_processed)
+    filtered_data = filter(i -> i.Date >= first(year_range.range) && i.Date <= last(year_range.range), data_processed)
 
     plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
 
@@ -150,8 +150,8 @@ using .Utils: scale_array, map_fields
   @onchange animate begin
 
     function cb(_)
-      first_year = filter_range.range[1] + 1
-      last_year = filter_range.range[end] + 1
+      first_year = year_range.range[1] + 1
+      last_year = year_range.range[end] + 1
       years_diff = last_year - first_year
 
       if last_year > max_year
@@ -159,7 +159,7 @@ using .Utils: scale_array, map_fields
         last_year = min_year + years_diff
       end
 
-      model.filter_range[] = RangeData(first_year:last_year)
+      model.year_range[] = RangeData(first_year:last_year)
     end
 
     if animate
@@ -186,6 +186,12 @@ using .Utils: scale_array, map_fields
 
   @onbutton confirm_cancel_sample_data begin
     show_sample_data_dialog = false
+  end
+
+  @onchange selected_filter_range begin
+    if(!isnothing(selected_filter_range))
+
+    end
   end
 end
 

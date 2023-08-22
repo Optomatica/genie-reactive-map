@@ -37,7 +37,7 @@ ui = () -> StippleUI.layout(
               class="q-pa-none",
               [
                 item(Genie.Renderer.Html.select(:selected_filter_feature, clearable=true, options=:features, label="Select a feature", useinput=true)),
-                itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="blue", labelalways=true), @showif("scalar_features.includes(selected_filter_feature)")),
+                itemsection(range("min_range_value":1:"max_range_value", :filter_range, label=true, color="blue", labelalways=true), @showif("scalar_features.includes(selected_filter_feature)")),
                 item(Genie.Renderer.Html.select(:selected_filter_value, clearable=true, options=:filter_values, label="Select a value", useinput=true), @showif("categorical_features.includes(selected_filter_feature)")),
               ]
             )
@@ -76,7 +76,7 @@ ui = () -> StippleUI.layout(
         [
           itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right", @click(:animate)); avatar=true, @showif("!animate")),
           itemsection(btn(; dense=true, flat=true, round=true, icon="pause", @click("animate = false")); avatar=true, @showif(:animate)),
-          itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="blue", labelalways=true)),
+          itemsection(range("min_year":1:"max_year", :year_range, label=true, color="blue", labelalways=true)),
         ], style="position: fixed; bottom: 0; right: 0; padding: 12px 40px; background-color: transparent; width: 80%; display: flex; "),
     ]
     ),

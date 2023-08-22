@@ -47,9 +47,17 @@ Base.@kwdef struct FeatureModel
   categorical_features::R{Array{String}} = []
   selected_size_feature::R{Union{Nothing,String}} = nothing
   selected_color_feature::R{Union{Nothing,String}} = nothing
+
   selected_filter_feature::R{Union{Nothing,String}} = nothing
+
+  filter_range::R{RangeData{Int64}} = RangeData(0:10)
+  min_range_value::R{Int64} = 0
+  max_range_value::R{Int64} = 10
+
   filter_values::R{Array{String}} = []
   selected_filter_value::R{Union{Nothing,String}} = nothing
+
+
 
 end
 
