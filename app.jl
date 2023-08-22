@@ -30,9 +30,7 @@ using .Utils: scale_array, map_fields
   @out max_year = current_year
   @out trace = [scattermapbox()]
   @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0), mapbox=attr(style="open-street-map", zoom=1.7))
-  @out config = ConfigType(
-    "***REMOVED***"
-  )
+  @out config = ConfigType(ENV["MAPBOX_KEY"])
 
   @onchange data_input begin
     selected_size_feature = nothing
