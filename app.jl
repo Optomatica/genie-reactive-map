@@ -189,11 +189,69 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange selected_filter_feature begin
-    if(!isnothing(selected_filter_feature))
+    if (!isnothing(selected_filter_feature))
+      if (selected_filter_feature in categorical_features)
+        filter_values = unique(data_input.data[!, selected_filter_feature])
+      else
+        df = data_input.data[!, [selected_filter_feature]] |> dropmissing
+        min_range_value = minimum(df[!, selected_filter_feature])
+        max_range_value = maximum(df[!, selected_filter_feature])
+        filter_range = RangeData(min_range_value:max_range_value)
+      end
+    end
+  end
 
+  @onchange selected_filter_value begin
+    if (!isnothing(selected_filter_value))
+      data_processed = data_input.data
+      filtered_data = filter(i -> i[selected_filter_feature] == selected_filter_value, data_processed)
+
+      plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
+
+      if (!isnothing(selected_size_feature))
+        marker = attr(
+          size=scale_array(filtered_data[!, selected_size_feature]),
+          color=marker.color,
+          colorscale=marker.colorscale
+        )
+      end
+
+      if (!isnothing(selected_color_feature))
+        marker = attr(
+          size=marker.size,
+          color=filtered_data[!, selected_color_feature],
+          colorscale=marker.colorscale,
+          showscale=true
+        )
+      end
+    end
+  end
+
+  @onchange filter_range begin
+    data_processed = data_input.data
+    filtered_data = filter(i -> i[selected_filter_feature] >= first(filter_range.range) && i[selected_filter_feature] <= last(filter_range.range), data_processed)
+
+    plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
+
+    if (!isnothing(selected_size_feature))
+      marker = attr(
+        size=scale_array(filtered_data[!, selected_size_feature]),
+        color=marker.color,
+        colorscale=marker.colorscale
+      )
+    end
+
+    if (!isnothing(selected_color_feature))
+      marker = attr(
+        size=marker.size,
+        color=filtered_data[!, selected_color_feature],
+        colorscale=marker.colorscale,
+        showscale=true
+      )
     end
   end
 end
+
 
 
 route("/") do
