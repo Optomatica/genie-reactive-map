@@ -15,7 +15,7 @@ using .Utils: scale_array, map_fields
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_size_feature::Union{Nothing,String} = nothing
   @in selected_color_feature::Union{Nothing,String} = nothing
-  @in color_scale = "Greens"
+  @in color_scale = "Blues"
   @in animate = false
   @in mapbox_style = "open-street-map"
 
@@ -53,10 +53,11 @@ using .Utils: scale_array, map_fields
   @onchange selected_color_feature begin
     data_processed = data_input.data
     if (!isnothing(selected_color_feature))
+
       marker = attr(
         size=marker.size,
         color=data_processed[!, selected_color_feature],
-        colorscale=marker.colorscale,
+        colorscale=color_scale,
         showscale=true
       )
 
@@ -94,6 +95,7 @@ using .Utils: scale_array, map_fields
   end
 
   @onchange color_scale begin
+    @show "hello" color_scale
     marker = attr(
       size=marker.size,
       color=marker.color,
