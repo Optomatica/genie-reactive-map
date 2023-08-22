@@ -76,7 +76,7 @@ using .Utils: scale_array, map_fields
         size=scale_array(data_processed[!, selected_size_feature]),
         color=marker.color,
         colorscale=marker.colorscale,
-        showscale=true
+        showscale=marker.showscale
       )
 
     else
@@ -119,7 +119,7 @@ using .Utils: scale_array, map_fields
         size=marker.size,
         color=filtered_data[!, selected_color_feature],
         colorscale=marker.colorscale,
-        showscale=true
+        showscale=false
       )
     end
   end
@@ -127,7 +127,7 @@ using .Utils: scale_array, map_fields
   @onchange plot_data, marker begin
     trace = [scattermapbox(
       plot_data;
-      marker=marker,
+      marker=marker
     )]
   end
 
