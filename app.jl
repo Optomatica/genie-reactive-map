@@ -188,8 +188,8 @@ using .Utils: scale_array, map_fields
     show_sample_data_dialog = false
   end
 
-  @onchange selected_filter_range begin
-    if(!isnothing(selected_filter_range))
+  @onchange selected_filter_feature begin
+    if(!isnothing(selected_filter_feature))
 
     end
   end
