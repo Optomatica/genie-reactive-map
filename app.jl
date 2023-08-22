@@ -39,9 +39,11 @@ using .Utils: scale_array, map_fields
     selected_color_feature = nothing
     data_processed = data_input.data
 
-    features = filter(r -> r ∉ ["Date", "Longitude", "Latitude"], names(data_processed))
-    scalar_features = features[findall(data_processed |> eachcol .|> eltype .<: Number)]
-    categorical_features = features[findall(data_processed |> eachcol .|> eltype .<: String)]
+    df_without_basics = data_processed[!, filter(r -> r ∉ ["Date", "Longitude", "Latitude", "tooltip_text"], names(data_processed))]
+    features = names(df_without_basics)
+    numerical_indicies = df_without_basics |> eachcol .|> eltype .<: Number
+    scalar_features = features[findall(numerical_indicies)]
+    categorical_features = features[findall(.!numerical_indicies)]
 
 
     min_year = minimum(data_processed[!, "Date"])

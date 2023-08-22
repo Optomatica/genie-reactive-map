@@ -48,6 +48,9 @@ Base.@kwdef struct FeatureModel
   selected_size_feature::R{Union{Nothing,String}} = nothing
   selected_color_feature::R{Union{Nothing,String}} = nothing
   selected_filter_feature::R{Union{Nothing,String}} = nothing
+  filter_values::R{Array{String}} = []
+  selected_filter_value::R{Union{Nothing,String}} = nothing
+
 end
 
 

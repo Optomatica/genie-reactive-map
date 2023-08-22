@@ -24,6 +24,7 @@ ui = () -> StippleUI.layout(
           tabpanels(:tab_m, [
             tabpanel(
               name="styles",
+              class="q-pa-none",
               [
                 item(Genie.Renderer.Html.select(:selected_color_feature, clearable=true, options=:scalar_features, label="Color based on", useinput=true)),
                 item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true, @showif("selected_color_feature"))),
@@ -32,9 +33,12 @@ ui = () -> StippleUI.layout(
               ]
             ),
             tabpanel(
-              name="filters", [
+              name="filters",
+              class="q-pa-none",
+              [
                 item(Genie.Renderer.Html.select(:selected_filter_feature, clearable=true, options=:features, label="Select a feature", useinput=true)),
-                # item(Genie.Renderer.Html.select(:selected_filter_value, clearable=true, options=:filter_values, label="Select a value", useinput=true), @showif("")),
+                itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="blue", labelalways=true), @showif("scalar_features.includes(selected_filter_feature)")),
+                item(Genie.Renderer.Html.select(:selected_filter_value, clearable=true, options=:filter_values, label="Select a value", useinput=true), @showif("categorical_features.includes(selected_filter_feature)")),
               ]
             )
           ])]),
