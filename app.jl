@@ -125,7 +125,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
         size=marker.size,
         color=filtered_data[!, selected_color_feature],
         colorscale=marker.colorscale,
-        showscale=true
+        showscale=false
       )
     end
   end
