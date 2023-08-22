@@ -79,7 +79,7 @@ using .Utils: scale_array, map_fields
         size=scale_array(data_processed[!, selected_size_feature]),
         color=marker.color,
         colorscale=marker.colorscale,
-        showscale=true
+        showscale=marker.showscale
       )
 
     else
@@ -107,7 +107,7 @@ using .Utils: scale_array, map_fields
 
   @onchange year_range begin
     data_processed = data_input.data
-    filtered_data = filter(i -> i.Date >= first(year_range.range) && i.Date <= last(year_range.range), data_processed)
+    filtered_data = filter_data(data_processed)
 
     plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
 
@@ -196,7 +196,7 @@ using .Utils: scale_array, map_fields
         df = data_input.data[!, [selected_filter_feature]] |> dropmissing
         min_range_value = minimum(df[!, selected_filter_feature])
         max_range_value = maximum(df[!, selected_filter_feature])
-        filter_range = RangeData(min_range_value:max_range_value)
+        filter_range = RangeData{Float64}(min_range_value:max_range_value)
       end
     end
   end
@@ -204,7 +204,9 @@ using .Utils: scale_array, map_fields
   @onchange selected_filter_value begin
     if (!isnothing(selected_filter_value))
       data_processed = data_input.data
-      filtered_data = filter(i -> i[selected_filter_feature] == selected_filter_value, data_processed)
+
+
+      filtered_data = filter_data(data_processed)
 
       plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
 
@@ -229,7 +231,7 @@ using .Utils: scale_array, map_fields
 
   @onchange filter_range begin
     data_processed = data_input.data
-    filtered_data = filter(i -> i[selected_filter_feature] >= first(filter_range.range) && i[selected_filter_feature] <= last(filter_range.range), data_processed)
+    filtered_data = filter_data(data_processed)
 
     plot_data = Dict(:lat => filtered_data[!, "Latitude"], :lon => filtered_data[!, "Longitude"], :text => filtered_data[!, "tooltip_text"])
 
@@ -250,6 +252,18 @@ using .Utils: scale_array, map_fields
       )
     end
   end
+end
+
+function filter_data(data::DataFrame)
+  year_range = model.year_range[]
+  selected_filter_feature = model.selected_filter_feature[]
+  selected_filter_value = model.selected_filter_value[]
+  # filter_range = model.filter_range[]
+  filter(i ->
+      i.Date >= first(year_range.range) && i.Date <= last(year_range.range) &&
+        isnothing(selected_filter_value) ? true : i[selected_filter_feature] === selected_filter_value,
+    # (isnothing(filter_range) ? true : i -> i[selected_filter_feature] >= first(filter_range.range) && i[selected_filter_feature] <= last(filter_range.range)),
+    data)
 end
 
 

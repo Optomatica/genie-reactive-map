@@ -36,8 +36,8 @@ ui = () -> StippleUI.layout(
               name="filters",
               class="q-pa-none",
               [
-                item(Genie.Renderer.Html.select(:selected_filter_feature, clearable=true, options=:features, label="Select a feature", useinput=true)),
-                itemsection(range("min_range_value":1:"max_range_value", :filter_range, label=true, color="blue", labelalways=true), @showif("scalar_features.includes(selected_filter_feature)")),
+                item(Genie.Renderer.Html.select(:selected_filter_feature, clearable=true, options=:categorical_features, label="Select a feature", useinput=true)),
+                # itemsection(range("min_range_value":1:"max_range_value", :filter_range, label=true, color="blue", labelalways=true), @showif("scalar_features.includes(selected_filter_feature)")),
                 item(Genie.Renderer.Html.select(:selected_filter_value, clearable=true, options=:filter_values, label="Select a value", useinput=true), @showif("categorical_features.includes(selected_filter_feature)")),
               ]
             )

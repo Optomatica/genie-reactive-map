@@ -50,11 +50,11 @@ Base.@kwdef struct FeatureModel
 
   selected_filter_feature::R{Union{Nothing,String}} = nothing
 
-  filter_range::R{RangeData{Int64}} = RangeData(0:10)
-  min_range_value::R{Int64} = 0
-  max_range_value::R{Int64} = 10
+  filter_range::R{Union{Nothing,RangeData{Float64}}} = nothing
+  min_range_value::R{Float64} = 0
+  max_range_value::R{Float64} = 10
 
-  filter_values::R{Array{String}} = []
+  filter_values::R{Array{Union{String,Missing}}} = []
   selected_filter_value::R{Union{Nothing,String}} = nothing
 
 
