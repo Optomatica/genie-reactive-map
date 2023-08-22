@@ -33,7 +33,7 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   @out layout = PlotlyBase.Layout(margin=attr(l=0, r=0, t=0, b=0), mapbox=attr(style="open-street-map", zoom=1.7))
   @out tooltip_text::Array{String} = []
   @out config = ConfigType(
-    "***REMOVED***"
+    ENV["MAPBOX_KEY"]
   )
 
   @onchange data_input begin
