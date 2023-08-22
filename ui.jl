@@ -8,40 +8,12 @@ ui = () -> StippleUI.layout(
     ),
     ),
     drawer(
-      Html.div(class="q-pa-md", [
-        uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
+      Html.div(class="q-pa-md", [uploader(label="Upload Dataset", accept=".csv", method="POST", url="http://127.0.0.1:8000/", @on(:uploaded, :uploaded), style="width:100%"),
         # item([itemsection(p("Marker color")), itemsection(input(type="color", var"v-model"=:selected_color, label="Color"))]),
-        card([tabgroup(
-            :tab_m,
-            inlinelabel=true,
-            class="bg-primary text-white shadow-2",
-            [
-              tab(name="styles", icon="palette", label="Styles"),
-              tab(name="filters", icon="filter_alt", label="Filters"),
-            ]
-          ),
-          separator(),
-          tabpanels(:tab_m, [
-            tabpanel(
-              name="styles",
-              class="q-pa-none",
-              [
-                item(Genie.Renderer.Html.select(:selected_color_feature, clearable=true, options=:scalar_features, label="Color based on", useinput=true)),
-                item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true, @showif("selected_color_feature"))),
-                item(Genie.Renderer.Html.select(:selected_size_feature, clearable=true, options=:scalar_features, label="Size based on", useinput=true)),
-                item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
-              ]
-            ),
-            tabpanel(
-              name="filters",
-              class="q-pa-none",
-              [
-                item(Genie.Renderer.Html.select(:selected_filter_feature, clearable=true, options=:categorical_features, label="Select a feature", useinput=true)),
-                # itemsection(range("min_range_value":1:"max_range_value", :filter_range, label=true, color="blue", labelalways=true), @showif("scalar_features.includes(selected_filter_feature)")),
-                item(Genie.Renderer.Html.select(:selected_filter_value, clearable=true, options=:filter_values, label="Select a value", useinput=true), @showif("categorical_features.includes(selected_filter_feature)")),
-              ]
-            )
-          ])]),
+        item(Genie.Renderer.Html.select(:selected_color_feature, clearable=true, options=:features, label="Color based on", useinput=true)),
+        item(Genie.Renderer.Html.select(:color_scale, options=:color_scale_options, label="Color Scale", useinput=true, @showif("selected_color_feature"))),
+        item(Genie.Renderer.Html.select(:selected_size_feature, clearable=true, options=:features, label="Size based on", useinput=true)),
+        item(Genie.Renderer.Html.select(:mapbox_style, options=:mapbox_styles, label="Mapbox Style", useinput=true)),
         item(btn("Show Data", color="primary", icon="view_list", style="font-weight: 600; text-transform: none;", @click("data_show_dialog = true")), @showif("plot_data.lon.length > 0")),
         item(btn("Choose Sample Data", color="primary", icon="grid_view", style="background-color: rgb(239,239,239); font-weight: 600; text-transform: none;", flat=true, @click("show_sample_data_dialog = true"))),
         Html.div(class="q-pa-md q-gutter-sm", [
@@ -76,7 +48,7 @@ ui = () -> StippleUI.layout(
         [
           itemsection(btn(; dense=true, flat=true, round=true, icon="arrow_right", @click(:animate)); avatar=true, @showif("!animate")),
           itemsection(btn(; dense=true, flat=true, round=true, icon="pause", @click("animate = false")); avatar=true, @showif(:animate)),
-          itemsection(range("min_year":1:"max_year", :year_range, label=true, color="blue", labelalways=true)),
+          itemsection(range("min_year":1:"max_year", :filter_range, label=true, color="blue", labelalways=true)),
         ], style="position: fixed; bottom: 0; right: 0; padding: 12px 40px; background-color: transparent; width: 80%; display: flex; "),
     ]
     ),
