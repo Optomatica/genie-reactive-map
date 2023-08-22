@@ -188,18 +188,6 @@ using .Utils: scale_array, map_fields, generate_tooltip_text
   end
 end
 
-function filter_data(data::DataFrame)
-  year_range = model.year_range[]
-  selected_filter_feature = model.selected_filter_feature[]
-  selected_filter_value = model.selected_filter_value[]
-  # filter_range = model.filter_range[]
-  filter(i ->
-      i.Date >= first(year_range.range) && i.Date <= last(year_range.range) &&
-        isnothing(selected_filter_value) ? true : i[selected_filter_feature] === selected_filter_value,
-    # (isnothing(filter_range) ? true : i -> i[selected_filter_feature] >= first(filter_range.range) && i[selected_filter_feature] <= last(filter_range.range)),
-    data)
-end
-
 
 
 route("/") do
