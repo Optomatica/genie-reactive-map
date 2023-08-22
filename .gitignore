@@ -1,2 +1,3 @@
 log/*.log
 .env
+passwords.txt
