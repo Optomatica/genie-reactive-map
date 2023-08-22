@@ -28,4 +28,4 @@ CSV file with the following columns:
 2. Longitude (Required)
 3. Date (Optional)
 4. Any other numerical column could be used as marker size & color (Optional)
-
+5. For satellite view you need to submit a [free mapbox token](https://plotly.com/javascript/mapbox-layers/). 
