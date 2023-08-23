@@ -28,4 +28,5 @@ CSV file with the following columns:
 2. Longitude (Required)
 3. Date (Optional)
 4. Any other numerical column could be used as marker size & color (Optional)
-5. For satellite view you need to get a [free mapbox token](https://plotly.com/javascript/mapbox-layers/). After having the token you can replace `your token` with the real token in `app.jl`.
+### Satellite view is not working.
+For satellite view you need to get a [free mapbox token](https://plotly.com/javascript/mapbox-layers/). After having the token you can replace `your token` with the real token in `app.jl`.
