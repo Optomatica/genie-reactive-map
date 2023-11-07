@@ -1,16 +1,14 @@
-module App
 using PlotlyBase
 using GenieFramework
 using DataFrames
 using CSV
-include("./ui.jl")
 include("./constants.jl")
 include("./utils.jl")
 using .Constants: current_year, ScatterModel, LayoutModel, COLOR_SCALE_OPTIONS, ConfigType, MAPBOX_STYLES, DataModel, SampleDataModel
 using .Utils: scale_array, map_fields
 @genietools
 
-@app Model begin
+@app begin
   @in left_drawer_open = true
   @in filter_range::RangeData{Int} = RangeData(0:current_year)
   @in selected_size_feature::Union{Nothing,String} = nothing
@@ -152,7 +150,7 @@ using .Utils: scale_array, map_fields
         last_year = min_year + years_diff
       end
 
-      model.filter_range[] = RangeData(first_year:last_year)
+      filter_range = RangeData(first_year:last_year)
     end
 
     if animate
@@ -174,7 +172,8 @@ using .Utils: scale_array, map_fields
   @onbutton confirm_choose_sample_data begin
     show_sample_data_dialog = false
     df = CSV.read(choosen_sample_data, DataFrame) |> map_fields
-    model.data_input[] = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
+    data_input = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
+    @show "data loaded!"
   end
 
   @onbutton confirm_cancel_sample_data begin
@@ -183,12 +182,9 @@ using .Utils: scale_array, map_fields
 end
 
 
+@page("/", "ui.jl")
 
-route("/") do
-  global model = Model |> init |> handlers
-  return page(model, ui())
-end
-
+# this route should not work anymore since the global model is gone
 route("/", method=POST) do
   files = Genie.Requests.filespayload()
   f = first(files)
@@ -196,5 +192,5 @@ route("/", method=POST) do
   model.data_input[] = DataTable(df, DataTableOptions(columns=map(col -> Column(col), names(df))))
   return "Perfecto!"
 end
+    
 
-end
