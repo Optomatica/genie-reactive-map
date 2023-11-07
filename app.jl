@@ -16,6 +16,7 @@ using .Utils: scale_array, map_fields
   @in color_scale = "Blues"
   @in animate = false
   @in mapbox_style = "open-street-map"
+  @out data_input = DataTable()
 
   @mixin data::DataModel
   @mixin ScatterModel
